@@ -1,6 +1,7 @@
 import { createContext, useReducer, useEffect } from "react";
 import axios from '../utils/axios';
 import { TOKEN_NAME } from "@env"
+import { NativeModules } from "react-native";
 
 const initialState = {
   loading: false,
@@ -84,13 +85,19 @@ export default function AuthcontextProvider({ children }) {
           })
           AsyncStorage.setItem(TOKEN_NAME, response.data.user.accessToken);
           AsyncStorage.setItem("THRIFTY_USER_ID", response.data.user._id.toString());
+
+          setTimeout(() => {
+            NativeModules.DevSettings.reload();
+          }, 1000)
         })
         .catch((error) => {
           // return Object.keys(error.response?.data?.errors).map(key => {
 
           // })
         })
-    else { }
+    else {
+
+    }
   }
 
   function logout() {
@@ -98,11 +105,42 @@ export default function AuthcontextProvider({ children }) {
     AsyncStorage.removeItem(TOKEN_NAME);
     AsyncStorage.removeItem("THRIFTY_USER_ID");
     dispatch({ type: Types.AUTH_RESET });
+    setTimeout(() => {
+      NativeModules.DevSettings.reload();
+    }, 1000)
+  }
+
+  async function updateUserInfo(data) {
+    dispatch({ type: Types.AUTH_LOADING })
+    const token = await AsyncStorage.getItem(TOKEN_NAME)
+    axios.defaults.headers.common['Authorization'] = token
+
+    return new Promise(function (resolve, reject) {
+      axios.patch("/user/update-deatils/", { ...data, email: state.user?.email })
+        .then(res => {
+          if (res.data?.success) {
+            AsyncStorage.setItem("THRIFTY_USER_ID", res.data.user._id.toString());
+            dispatch({
+              type: Types.AUTH_SUCCESS,
+              payload: {
+                user: res.data.user,
+                accessToken: token
+              }
+            })
+            resolve(true);
+          }
+        })
+        .catch(err => {
+          // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
+          resolve(false);
+        })
+    })
   }
 
   const value = {
     ...state,
     googleAuth,
+    updateUserInfo,
     logout
   };
 
