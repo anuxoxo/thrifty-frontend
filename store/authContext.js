@@ -1,7 +1,11 @@
 import { createContext, useReducer, useEffect } from "react";
-import axios from '../utils/axios';
-import { TOKEN_NAME } from "@env"
 import { NativeModules } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TOKEN_NAME } from "@env"
+
+import axios from '../utils/axios';
+import * as Types from "./actionTypes"
+import { fetchDataFromStorage } from "../utils"
 
 const initialState = {
   loading: false,

@@ -1,20 +1,47 @@
+import { useLayoutEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, Platform } from 'react-native'
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+
+import AuthStack from './navigation/AuthStack'
+import AuthenticatedStack from './navigation/AuthenticatedStack'
+
+import AuthContextProvider from "./store/authContext"
+
+import { manageToken } from './utils';
+
+function Outlet() {
+  const [currentStack, setCurrentStack] = useState(<></>)
+
+  useLayoutEffect(() => {
+    manageToken().then(token => {
+      if (token)
+        setCurrentStack(<AuthenticatedStack />)
+      else
+        setCurrentStack(<AuthStack />)
+    })
+  }, [])
+
+  return <>{currentStack}</>
+}
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthContextProvider>
+
+      <NavigationContainer>
+        <SafeAreaView style={styles.container}>
+          <Outlet />
+        </SafeAreaView>
+      </NavigationContainer>
+
+    </AuthContextProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
   },
 });
