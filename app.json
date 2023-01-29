@@ -4,6 +4,7 @@
     "slug": "thrifty-frontend",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "com.thrifty.thriftyFrontend",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -18,16 +19,28 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.thrifty.thriftyFrontend",
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "package": "com.thrifty.thriftyFrontend",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "plugins": [
+        "@react-native-google-signin/google-signin"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "22c85c18-ef67-43ea-9f73-4fbf9cf69004"
+      }
     }
   }
 }
