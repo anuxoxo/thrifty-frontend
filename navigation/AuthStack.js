@@ -1,3 +1,5 @@
+import { useLayoutEffect, useState, useEffect } from "react";
+
 import {
   View,
   Text,
@@ -12,52 +14,51 @@ import logoText from "../assets/logoText.svg";
 import { StyleSheet } from "react-native-web";
 import { SvgXml } from "react-native-svg";
 
-// import {
-//   GoogleSignin,
-//   statusCodes,
-//   GoogleSigninButton,
-// } from "@react-native-google-signin/google-signin";
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+WebBrowser.maybeCompleteAuthSession();
+
+const storeData = async (value) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem("@auth", jsonValue);
+  } catch (e) {
+    // saving error
+  }
+};
 
 export default function AuthStack() {
-  // const signIn = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices();
-  //     const userInfo = await GoogleSignin.signIn();
-  //     this.setState({ userInfo });
-  //   } catch (error) {
-  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-  //       // user cancelled the login flow
-  //     } else if (error.code === statusCodes.IN_PROGRESS) {
-  //       // operation (e.g. sign in) is in progress already
-  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-  //       // play services not available or outdated
-  //     } else {
-  //       // some other error happened
-  //     }
-  //   }
-  // };
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: "",
+    iosClientId:
+      "115982844469-4e8glphqom724b0o0se5l490nhacs0hf.apps.googleusercontent.com",
+    androidClientId:
+      "115982844469-aukn05vr30s4brk617qhlg4hdq95gkhi.apps.googleusercontent.com",
+    webClientId:
+      "115982844469-ooioul62d213238cvcdst9ic0omkkpbb.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { authentication } = response;
+      storeData(authentication);
+      console.log(authentication);
+    }
+  }, [response]);
 
   return (
-    // <ImageBackground source={logoText} style={styles.background}>
     <View style={styles.container}>
-      {/* <SvgXml xml={logoText} width="200" height="200" /> */}
-      <TouchableOpacity
-        style={styles.button}
-        // onPress={}
-      >
-        <Text style={styles.buttonText}>Sign in with Google</Text>
-      </TouchableOpacity>
-      {false && <Text style={styles.error}>{"error"}</Text>}
-      <GoogleSigninButton
+      <Button
         style={{ width: 192, height: 48 }}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        // onPress={this._signIn}
-        // disabled={this.state.isSigninInProgress}
+        disabled={!request}
+        title="Login"
+        onPress={() => {
+          promptAsync();
+        }}
       />
-      ;
     </View>
-    // </ImageBackground>
   );
 }
 
