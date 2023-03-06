@@ -58,9 +58,7 @@ export default function AuthStack() {
         style={{ width: 192, height: 48 }}
         disabled={!request}
         title="Login"
-        onPress={() => {
-          handlePress();
-        }}
+        onPress={handlePress}
       />
     </View>
   );

@@ -52,6 +52,7 @@ export default function AuthcontextProvider({ children }) {
   }, []);
 
   async function getUserInfo() {
+    console.log("user info")
     dispatch({ type: Types.AUTH_LOADING });
     const token = await AsyncStorage.getItem(TOKEN_NAME);
     axios.defaults.headers.common["Authorization"] = token;
@@ -60,7 +61,7 @@ export default function AuthcontextProvider({ children }) {
       .then((userId) => {
         if (userId) {
           axios
-            .get("/user/me/" + userId)
+            .get("/user/" + userId + "/")
             .then((res) => {
               dispatch({ type: Types.AUTH_SUCCESS, payload: res.data.user });
             })
@@ -88,6 +89,8 @@ export default function AuthcontextProvider({ children }) {
       axios
         .get("/auth/google/")
         .then((response) => {
+          console.log("auth success")
+
           dispatch({
             type: Types.AUTH_SUCCESS,
             payload: response.data?.user,

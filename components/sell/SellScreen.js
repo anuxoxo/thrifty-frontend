@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 function SellScreen({ navigation }) {
-  const { id } = useRoute().params;
+  const id = useRoute().params?.id;
 
   return (
     <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
