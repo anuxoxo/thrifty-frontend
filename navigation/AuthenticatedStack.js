@@ -6,7 +6,6 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import SettingsScreen from "../components/settings/SettingsScreen";
 
 const Stack = createNativeStackNavigator();

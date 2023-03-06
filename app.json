@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "thrifty-frontend",
-    "slug": "thrifty-frontend",
+    "slug": "thrifty",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,14 +19,14 @@
     ],
     "ios": {
       "bundleIdentifier": "com.thrifty.thriftyFrontend",
-      "supportsTablet": true,
+      "supportsTablet": true
     },
     "android": {
       "package": "com.thrifty.thriftyFrontend",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -36,8 +36,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "22c85c18-ef67-43ea-9f73-4fbf9cf69004"
+        "projectId": "08b54a2a-b11f-4fa8-96b3-5aa7c57a8fe5"
       }
-    }
+    },
+    "owner": "anushka-14"
   }
 }

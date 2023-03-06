@@ -88,7 +88,6 @@ export default function AuthcontextProvider({ children }) {
       axios
         .get("/auth/google/")
         .then((response) => {
-          console.log("Response", response);
           dispatch({
             type: Types.AUTH_SUCCESS,
             payload: response.data?.user,
