@@ -5,7 +5,10 @@ function HomeScreen({ navigation }) {
   return (
     <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
       <Text>Home Screen</Text>
-      <Button title="Go to Sell" onPress={() => navigation.navigate("Sell")} />
+      <Button
+        title="Go to Sell"
+        onPress={() => navigation.navigate("Sell", { id: 123 })}
+      />
     </View>
   );
 }

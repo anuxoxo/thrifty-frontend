@@ -1,14 +1,17 @@
 import React from "react";
-import { View } from "react-native";
+import { Button, Settings, View } from "react-native";
 import HomeScreen from "../components/home/HomeScreen";
 import SellScreen from "../components/sell/SellScreen";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 
-// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import SettingsScreen from "../components/settings/SettingsScreen";
 
-// const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+// const Drawer = createDrawerNavigator();
 
 export default function AuthenticatedStack() {
   return (
@@ -23,8 +26,14 @@ export default function AuthenticatedStack() {
       </Stack.Navigator> */}
 
       <Tab.Navigator>
+        {/* <Tab.Screen
+          name="Root"
+          component={Root}
+          options={{ headerShown: false }}
+        /> */}
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Sell" component={SellScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
 
       {/* <Tab.Navigator
@@ -61,3 +70,12 @@ export default function AuthenticatedStack() {
     </>
   );
 }
+
+// function Root() {
+//   return (
+//     <Drawer.Navigator useLegacyImplementation>
+//       <Drawer.Screen name="Home" component={HomeScreen} />
+//       <Drawer.Screen name="Sell" component={SellScreen} />
+//     </Drawer.Navigator>
+//   );
+// }

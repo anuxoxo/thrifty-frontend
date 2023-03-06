@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect } from "react";
+import { useLayoutEffect, useState, useEffect, useContext } from "react";
 
 import {
   View,
@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import React from "react";
 
-import { Authcontext } from "../";
 import logoText from "../assets/logoText.svg";
 import { StyleSheet } from "react-native-web";
 import { SvgXml } from "react-native-svg";
@@ -17,6 +16,7 @@ import { SvgXml } from "react-native-svg";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Authcontext } from "../store/authContext";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -30,7 +30,9 @@ const storeData = async (value) => {
 };
 
 export default function AuthStack() {
-  const [request, response, promptAsync] = Google.useAuthRequest({
+  const { googleAuth } = useContext(Authcontext);
+
+  const [request, response, googlePromptAsync] = Google.useAuthRequest({
     expoClientId: "",
     iosClientId:
       "115982844469-4e8glphqom724b0o0se5l490nhacs0hf.apps.googleusercontent.com",
@@ -40,13 +42,15 @@ export default function AuthStack() {
       "115982844469-ooioul62d213238cvcdst9ic0omkkpbb.apps.googleusercontent.com",
   });
 
-  useEffect(() => {
+  async function handlePress() {
+    const response = await googlePromptAsync();
     if (response?.type === "success") {
       const { authentication } = response;
-      storeData(authentication);
-      console.log(authentication);
+      await googleAuth(true, authentication.accessToken);
+    } else {
+      await googleAuth(false, null);
     }
-  }, [response]);
+  }
 
   return (
     <View style={styles.container}>
@@ -55,7 +59,8 @@ export default function AuthStack() {
         disabled={!request}
         title="Login"
         onPress={() => {
-          promptAsync();
+          // promptAsync();
+          handlePress();
         }}
       />
     </View>
