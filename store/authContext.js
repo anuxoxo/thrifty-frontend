@@ -1,18 +1,18 @@
 import { createContext, useReducer, useEffect } from "react";
-import { NativeModules } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TOKEN_NAME } from "@env"
+import { NativeModules, Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TOKEN_NAME } from "@env";
 
-import axios from '../utils/axios';
-import * as Types from "./actionTypes"
-import { fetchDataFromStorage } from "../utils"
+import axios from "../utils/axios";
+import * as Types from "./actionTypes";
+import { fetchDataFromStorage } from "../utils";
 
 const initialState = {
   loading: false,
   isAuthenticated: false,
   user: {},
-  errors: []
-}
+  errors: [],
+};
 export const Authcontext = createContext(initialState);
 
 function authReducer(state, action) {
@@ -20,8 +20,8 @@ function authReducer(state, action) {
     case Types.AUTH_LOADING:
       return {
         ...state,
-        loading: true
-      }
+        loading: true,
+      };
     case Types.AUTH_SUCCESS:
       return {
         ...state,
@@ -29,18 +29,18 @@ function authReducer(state, action) {
         isAuthenticated: Boolean(action.payload?.accessToken),
         user: action.payload,
         errors: [],
-      }
+      };
     case Types.AUTH_FAILED:
       return {
         loading: false,
         isAuthenticated: false,
         user: {},
-        errors: action.payload.errors
-      }
+        errors: action.payload.errors,
+      };
     case Types.AUTH_RESET:
-      return initialState
+      return initialState;
     default:
-      return state
+      return state;
   }
 }
 
@@ -48,59 +48,68 @@ export default function AuthcontextProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {
-    getUserInfo()
-  }, [])
+    getUserInfo();
+  }, []);
 
   async function getUserInfo() {
-    dispatch({ type: Types.AUTH_LOADING })
-    const token = await AsyncStorage.getItem(TOKEN_NAME)
-    axios.defaults.headers.common['Authorization'] = token
+    dispatch({ type: Types.AUTH_LOADING });
+    const token = await AsyncStorage.getItem(TOKEN_NAME);
+    axios.defaults.headers.common["Authorization"] = token;
 
     fetchDataFromStorage("THRIFTY_USER_ID")
-      .then(userId => {
+      .then((userId) => {
         if (userId) {
-          axios.get("/user/me/" + userId)
-            .then(res => {
-              dispatch({ type: Types.AUTH_SUCCESS, payload: res.data.user })
+          axios
+            .get("/user/me/" + userId)
+            .then((res) => {
+              dispatch({ type: Types.AUTH_SUCCESS, payload: res.data.user });
             })
-            .catch(error => {
-              dispatch({ type: Types.AUTH_FAILED, payload: error.response.data })
-              logout()
-            })
+            .catch((error) => {
+              dispatch({
+                type: Types.AUTH_FAILED,
+                payload: error.response.data,
+              });
+              logout();
+            });
         } else {
-          dispatch({ type: Types.AUTH_SUCCESS, payload: {} })
+          dispatch({ type: Types.AUTH_SUCCESS, payload: {} });
         }
       })
-      .catch(err => {
-        logout()
-      })
+      .catch((err) => {
+        logout();
+      });
   }
 
   function googleAuth(success, accessToken) {
-    dispatch({ type: Types.AUTH_LOADING })
-    axios.defaults.headers.common['Authorization'] = accessToken
+    dispatch({ type: Types.AUTH_LOADING });
+    axios.defaults.headers.common["Authorization"] = accessToken;
 
     if (success)
-      axios.get("/auth/google/")
-        .then(response => {
+      axios
+        .get("/auth/google/")
+        .then((response) => {
+          console.log("Response", response);
           dispatch({
             type: Types.AUTH_SUCCESS,
-            payload: response.data?.user
-          })
+            payload: response.data?.user,
+          });
           AsyncStorage.setItem(TOKEN_NAME, response.data.user.accessToken);
-          AsyncStorage.setItem("THRIFTY_USER_ID", response.data.user._id.toString());
+          AsyncStorage.setItem(
+            "THRIFTY_USER_ID",
+            response.data.user._id.toString()
+          );
 
           setTimeout(() => {
-            NativeModules.DevSettings.reload();
-          }, 1000)
+            Platform.OS === "web"
+              ? window.location.reload()
+              : NativeModules.DevSettings.reload();
+          }, 1000);
         })
         .catch((error) => {
           // return Object.keys(error.response?.data?.errors).map(key => {
-
           // })
-        })
+        });
     else {
-
     }
   }
 
@@ -111,43 +120,46 @@ export default function AuthcontextProvider({ children }) {
     dispatch({ type: Types.AUTH_RESET });
     setTimeout(() => {
       NativeModules.DevSettings.reload();
-    }, 1000)
+    }, 1000);
   }
 
   async function updateUserInfo(data) {
-    dispatch({ type: Types.AUTH_LOADING })
-    const token = await AsyncStorage.getItem(TOKEN_NAME)
-    axios.defaults.headers.common['Authorization'] = token
+    dispatch({ type: Types.AUTH_LOADING });
+    const token = await AsyncStorage.getItem(TOKEN_NAME);
+    axios.defaults.headers.common["Authorization"] = token;
 
     return new Promise(function (resolve, reject) {
-      axios.patch("/user/update-deatils/", { ...data, email: state.user?.email })
-        .then(res => {
+      axios
+        .patch("/user/update-deatils/", { ...data, email: state.user?.email })
+        .then((res) => {
           if (res.data?.success) {
-            AsyncStorage.setItem("THRIFTY_USER_ID", res.data.user._id.toString());
+            AsyncStorage.setItem(
+              "THRIFTY_USER_ID",
+              res.data.user._id.toString()
+            );
             dispatch({
               type: Types.AUTH_SUCCESS,
               payload: {
                 user: res.data.user,
-                accessToken: token
-              }
-            })
+                accessToken: token,
+              },
+            });
             resolve(true);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
           resolve(false);
-        })
-    })
+        });
+    });
   }
 
   const value = {
     ...state,
     googleAuth,
     updateUserInfo,
-    logout
+    logout,
   };
 
-  return <Authcontext.Provider value={value}>{children}</Authcontext.Provider>
+  return <Authcontext.Provider value={value}>{children}</Authcontext.Provider>;
 }
-

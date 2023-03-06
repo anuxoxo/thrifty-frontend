@@ -4,8 +4,7 @@ import { TOKEN_NAME } from "@env";
 
 export function manageToken() {
   return new Promise(async (resolve, reject) => {
-    // const token = await AsyncStorage.getItem(TOKEN_NAME);
-    const token = await AsyncStorage.getItem("@auth");
+    const token = await AsyncStorage.getItem(TOKEN_NAME);
     console.log("Getted Token", token);
 
     axios.defaults.headers.common["Content-Type"] = "application/json";
