@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, StyleSheet, SafeAreaView } from "react-native";
 import FloatingIcon from "../helpers/FloatingIcon";
 
 function SellScreen({ navigation }) {
@@ -9,10 +9,10 @@ function SellScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.outerContainer}>
+    <SafeAreaView style={styles.outerContainer}>
       <Text>Sell Screen</Text>
       <FloatingIcon pressHandler={addPressHandler} />
-    </View>
+    </SafeAreaView>
   );
 }
 

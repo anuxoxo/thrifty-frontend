@@ -14,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.thrifty.thriftyFrontend",
       "supportsTablet": true
@@ -30,15 +28,21 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "plugins": [
-        "@react-native-google-signin/google-signin"
-      ]
+      "plugins": ["@react-native-google-signin/google-signin"]
     },
     "extra": {
       "eas": {
         "projectId": "08b54a2a-b11f-4fa8-96b3-5aa7c57a8fe5"
       }
     },
-    "owner": "anushka-14"
+    "owner": "anushka-14",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Thrifty needs access to your photos."
+        }
+      ]
+    ]
   }
 }
