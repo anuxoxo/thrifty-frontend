@@ -1,13 +1,13 @@
 import { StyleSheet, SafeAreaView } from 'react-native'
 
 import ImagePicker from '../helpers/ImagePicker'
-import InputText from '../helpers/InputText'
+import Form from './Form'
 
 const AddProduct = () => {
   return (
     <SafeAreaView style={styles.outerContainer}>
       <ImagePicker />
-      <InputText />
+      <Form />
     </SafeAreaView>
   )
 }
