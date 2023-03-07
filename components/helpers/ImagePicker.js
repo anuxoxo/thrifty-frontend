@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   addBtn: {
-    borderColor: "lightgrey",
+    borderColor: "grey",
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: "center",
