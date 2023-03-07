@@ -1,15 +1,26 @@
 import React from "react";
-import { Text, View } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { Text, View, StyleSheet } from "react-native";
+import FloatingIcon from "../helpers/FloatingIcon";
 
 function SellScreen({ navigation }) {
-  const id = useRoute().params?.id;
+
+  function addPressHandler() {
+    navigation.navigate("AddProduct");
+  }
 
   return (
-    <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
-      <Text>Sell Screen {id}</Text>
+    <View style={styles.outerContainer}>
+      <Text>Sell Screen</Text>
+      <FloatingIcon pressHandler={addPressHandler} />
     </View>
   );
 }
 
+const styles = StyleSheet.create({
+  outerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1
+  }
+})
 export default SellScreen;
