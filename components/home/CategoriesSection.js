@@ -65,7 +65,7 @@ export default CategoriesSection;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: "auto",
   },
   button: {
     flex: 1,

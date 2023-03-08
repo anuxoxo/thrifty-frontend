@@ -1,14 +1,25 @@
 import React from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import SearchSection from "./SearchSection";
 import CategoriesSection from "./CategoriesSection";
+import AssetCardSwiperSection from "./AssetCardSwiperSection";
 
 function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <SearchSection />
       <CategoriesSection />
-    </View>
+      <AssetCardSwiperSection label={"Featured"} />
+      <AssetCardSwiperSection label={"New"} />
+      <AssetCardSwiperSection label={"For You"} />
+    </ScrollView>
   );
 }
 
