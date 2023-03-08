@@ -1,12 +1,25 @@
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
 
 export const CARD_WIDTH = Dimensions.get("window").width * 0.4;
 const CARD_HEIGHT = CARD_WIDTH * 1.1;
 
-function AssetCard({ name, price, images, bookMarked = false }) {
+function AssetCard({ name, price, images, bookMarked = false, navigation }) {
   return (
-    <View style={styles.cardStyle}>
+    <TouchableOpacity
+      style={styles.cardStyle}
+      onPress={() => {
+        console.log(navigation);
+        navigation.navigate("ProductScreen", { name: name });
+      }}
+    >
       <View style={styles.bookmarkIcon}>
         {bookMarked ? (
           <Ionicons name="bookmark" size={16} color="#1E1E1E" />
@@ -21,7 +34,7 @@ function AssetCard({ name, price, images, bookMarked = false }) {
         </Text>
         <Text style={styles.cardPrice}>{`₹${price}`}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -43,7 +56,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT * 0.7,
-    aspectRatio: 1,
+    aspectRatio: 1.3,
   },
   cardContent: {
     paddingVertical: 1,

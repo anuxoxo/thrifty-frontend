@@ -1,3 +1,4 @@
+import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../components/home/HomeScreen";
 import SellScreen from "../components/sell/SellScreen";

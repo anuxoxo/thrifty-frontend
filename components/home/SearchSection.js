@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     fontFamily: "Rubik",
     paddingLeft: 10,
     outlineStyle: "none",
-    width: "100%",
+    // width: "100%",
+    flex: 1,
   },
 });

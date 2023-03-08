@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text } from "react-native";
 import AssetCardSwiper from "../Asset/AssetCardSwiper";
 
-function AssetCardSwiperSection({ label = "Assets" }) {
+function AssetCardSwiperSection({ label = "Assets", navigation }) {
   return (
     <View style={styles.container}>
       <View
@@ -17,7 +17,7 @@ function AssetCardSwiperSection({ label = "Assets" }) {
           style={{
             color: "#1E1E1E",
             fontFamily: "Rubik",
-            fontSize: "12px",
+            fontSize: 12,
           }}
         >
           {label.toUpperCase()}
@@ -26,14 +26,14 @@ function AssetCardSwiperSection({ label = "Assets" }) {
           style={{
             color: "#1E1E1E",
             fontFamily: "Rubik",
-            fontSize: "10px",
+            fontSize: 10,
           }}
         >
           View all
         </Text>
       </View>
 
-      <AssetCardSwiper data={dummyData} />
+      <AssetCardSwiper data={dummyData} navigation={navigation} />
     </View>
   );
 }
@@ -51,27 +51,27 @@ const dummyData = [
     name: "HP Victus AMD Ryzen Laptop",
     price: "50000",
     images: [
-      "https://source.unsplash.com/random",
-      "https://source.unsplash.com/random",
-      "https://source.unsplash.com/random",
+      "https://picsum.photos/id/11/200/300",
+      "https://picsum.photos/id/11/200/300",
+      "https://picsum.photos/id/12/200/300",
     ],
   },
   {
     name: "Cracking the Coding Interview",
     price: "578",
     images: [
-      "https://source.unsplash.com/random",
-      "https://source.unsplash.com/random",
-      "https://source.unsplash.com/random",
+      "https://picsum.photos/id/13/200/300",
+      "https://picsum.photos/id/14/200/300",
+      "https://picsum.photos/id/15/200/300",
     ],
   },
   {
     name: "Cards",
     price: "50",
     images: [
-      "https://source.unsplash.com/random",
-      "https://source.unsplash.com/random",
-      "https://source.unsplash.com/random",
+      "https://picsum.photos/id/16/200/300",
+      "https://picsum.photos/id/17/200/300",
+      "https://picsum.photos/id/18/200/300",
     ],
   },
 ];

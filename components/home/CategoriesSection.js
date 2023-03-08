@@ -26,7 +26,7 @@ function CategoriesSection() {
           style={{
             color: "#1E1E1E",
             fontFamily: "Rubik",
-            fontSize: "12px",
+            fontSize: 12,
           }}
         >
           CATEGORIES
@@ -35,7 +35,7 @@ function CategoriesSection() {
           style={{
             color: "#1E1E1E",
             fontFamily: "Rubik",
-            fontSize: "10px",
+            fontSize: 10,
           }}
         >
           View all

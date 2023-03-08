@@ -16,9 +16,9 @@ function HomeScreen({ navigation }) {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <SearchSection />
       <CategoriesSection />
-      <AssetCardSwiperSection label={"Featured"} />
-      <AssetCardSwiperSection label={"New"} />
-      <AssetCardSwiperSection label={"For You"} />
+      <AssetCardSwiperSection navigation={navigation} label={"Featured"} />
+      <AssetCardSwiperSection navigation={navigation} label={"New"} />
+      <AssetCardSwiperSection navigation={navigation} label={"For You"} />
     </ScrollView>
   );
 }

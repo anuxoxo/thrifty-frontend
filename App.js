@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useLayoutEffect, useState, useEffect } from "react";
 import {
   SafeAreaView,
