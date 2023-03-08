@@ -16,6 +16,7 @@ import AuthenticatedStack from "./navigation/AuthenticatedStack";
 import AuthContextProvider from "./store/authContext";
 
 import { manageToken } from "./utils";
+import { useFonts } from "expo-font";
 
 function Outlet() {
   const [currentStack, setCurrentStack] = useState(<Text>Loading...</Text>);
@@ -31,6 +32,10 @@ function Outlet() {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Rubik: require("./assets/fonts/Rubik-SemiBold.ttf"),
+  });
+
   return (
     <AuthContextProvider>
       <NavigationContainer>

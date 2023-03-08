@@ -1,16 +1,43 @@
 import React from "react";
-import { Button, Text, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import SearchSection from "./SearchSection";
+import CategoriesSection from "./CategoriesSection";
 
 function HomeScreen({ navigation }) {
   return (
-    <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Sell"
-        onPress={() => navigation.navigate("Sell", { id: 123 })}
-      />
+    <View style={styles.container}>
+      <SearchSection />
+      <CategoriesSection />
     </View>
   );
 }
 
 export default HomeScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginHorizontal: 8,
+  },
+  checkbox: {
+    marginRight: 16,
+    alignSelf: "center",
+  },
+  title: {
+    color: "grey",
+    fontSize: 14,
+    padding: 20,
+    fontWeight: "bold",
+  },
+  btnContainer: {
+    flex: 1,
+    alignSelf: "center",
+    position: "absolute",
+    bottom: 30,
+    backgroundColor: "#8065F8",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+});
