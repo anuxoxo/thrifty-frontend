@@ -3,13 +3,31 @@ import HomeScreen from "../components/home/HomeScreen";
 import SellScreen from "../components/sell/SellScreen";
 import SettingsScreen from "../components/settings/SettingsScreen";
 import ThriftyLogo from "../assets/icons/ThriftyLogo.js";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { Foundation, Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigation() {
   return (
-    <Tab.Navigator screenOptions={{ headerTitleAlign: "center" }}>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerTitleAlign: "center",
+        tabBarIcon: ({ focused }) => {
+          if (route.name === "Home") {
+            return <Foundation name="home" size={24} color="black" />;
+          } else if (route.name === "Sell") {
+            return <Ionicons name="add-circle" size={24} color="black" />;
+          } else if (route.name === "Settings") {
+            return <Ionicons name="settings" size={24} color="black" />;
+          }
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: "#000000",
+        inactiveTintColor: "#A9A9A9",
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
