@@ -18,6 +18,9 @@ import AuthContextProvider from "./store/authContext";
 
 import { manageToken } from "./utils";
 import { useFonts } from "expo-font";
+// import * as SplashScreen from "expo-splash-screen";
+
+// SplashScreen.preventAutoHideAsync();
 
 function Outlet() {
   const [currentStack, setCurrentStack] = useState(<Text>Loading...</Text>);
@@ -35,7 +38,18 @@ function Outlet() {
 export default function App() {
   const [fontsLoaded] = useFonts({
     Rubik: require("./assets/fonts/Rubik-SemiBold.ttf"),
+    Poppins: require("./assets/fonts/Poppins-Medium.ttf"),
   });
+
+  // const onLayoutRootView = React.useCallback(async () => {
+  //   if (fontsLoaded) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <AuthContextProvider>

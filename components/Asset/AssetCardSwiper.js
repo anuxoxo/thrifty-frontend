@@ -1,7 +1,7 @@
 import { Dimensions, Platform, ScrollView, StyleSheet } from "react-native";
 import AssetCard, { CARD_WIDTH } from "./AssetCard";
 
-const SPACING_FOR_CARD_INSET = Dimensions.get("window").width * 0 - 10;
+const SPACING_FOR_CARD_INSET = Dimensions.get("window").width * 0.1 - 35;
 
 function AssetCardSwiper({ data = {}, navigation }) {
   return (

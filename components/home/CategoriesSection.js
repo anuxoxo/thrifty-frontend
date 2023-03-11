@@ -10,7 +10,7 @@ import {
 
 import catogoriesImages from "../../assets/images/categories";
 
-function CategoriesSection() {
+function CategoriesSection({ navigation }) {
   return (
     <View style={styles.container}>
       <View
@@ -18,7 +18,7 @@ function CategoriesSection() {
           {
             justifyContent: "space-between",
             flexDirection: "row",
-            margin: 10,
+            margin: 8,
           },
         ]}
       >
@@ -45,19 +45,31 @@ function CategoriesSection() {
         data={categories}
         numColumns={2}
         keyExtractor={(item) => item.id}
-        renderItem={renderCategory}
+        renderItem={({ item }) => (
+          <RenderCategory item={item} navigation={navigation} />
+        )}
+        style={{ marginHorizontal: 8 }}
       />
     </View>
   );
 }
 
-function renderCategory({ item }) {
+function RenderCategory({ item, navigation }) {
   return (
-    <ImageBackground source={item.illus} style={styles.button}>
-      <TouchableOpacity style={{ flex: 1, margin: 15 }}>
-        <Text style={{ textAlign: "center" }}>{item.label}</Text>
-      </TouchableOpacity>
-    </ImageBackground>
+    <TouchableOpacity
+      style={{ flex: 1 }}
+      onPress={() =>
+        navigation.navigate("CategoryScreen", {
+          ...item,
+        })
+      }
+    >
+      <ImageBackground source={item.illus} style={styles.button}>
+        <View style={{ flex: 1, margin: 20 }}>
+          <Text style={{ textAlign: "center" }}>{item.label}</Text>
+        </View>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 }
 
@@ -75,8 +87,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#1E1E1E",
     borderRadius: 10,
-    marginVertical: 4,
+    marginVertical: 6,
     marginHorizontal: 4,
+    shadowColor: "#1E1E1E",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    elevation: 3,
+    shadowRadius: 3,
+    backgroundColor: "#fff",
   },
 });
 

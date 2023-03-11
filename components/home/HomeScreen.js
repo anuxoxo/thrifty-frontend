@@ -15,7 +15,7 @@ function HomeScreen({ navigation }) {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <SearchSection />
-      <CategoriesSection />
+      <CategoriesSection navigation={navigation} />
       <AssetCardSwiperSection navigation={navigation} label={"Featured"} />
       <AssetCardSwiperSection navigation={navigation} label={"New"} />
       <AssetCardSwiperSection navigation={navigation} label={"For You"} />
@@ -28,7 +28,8 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
+    // backgroundColor: "#fff",
   },
   checkbox: {
     marginRight: 16,

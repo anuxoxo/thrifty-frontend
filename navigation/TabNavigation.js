@@ -13,6 +13,7 @@ export default function TabNavigation() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        presentation: "modal",
         headerTitleAlign: "center",
         tabBarIcon: ({ focused }) => {
           if (route.name === "Home") {
@@ -24,10 +25,6 @@ export default function TabNavigation() {
           }
         },
       })}
-      tabBarOptions={{
-        activeTintColor: "#000000",
-        inactiveTintColor: "#A9A9A9",
-      }}
     >
       <Tab.Screen
         name="Home"

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useRef } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,83 +6,137 @@ import {
   Dimensions,
   View,
   Image,
+  Button,
+  TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { useRoute } from "@react-navigation/core";
-import Carousel from "react-native-snap-carousel";
+import PagerView from "react-native-pager-view";
 
-export const SLIDER_WIDTH = Dimensions.get("window").width + 80;
-export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 1);
+const PAGE_VIEW_HEIGHT = Dimensions.get("window").height * 0.7;
 
-const ProductScreen = () => {
-  const { name } = useRoute().params;
-  const isCarousel = useRef(null);
+const ProductScreen = ({ navigation }) => {
+  const { name, price, images } = useRoute().params;
 
   return (
     <SafeAreaView style={styles.outerContainer}>
-      <Carousel
-        layout="tinder"
-        layoutCardOffset={9}
-        ref={isCarousel}
-        data={dummyData}
-        renderItem={CarouselCardItem}
-        sliderWidth={SLIDER_WIDTH}
-        itemWidth={ITEM_WIDTH}
-        inactiveSlideShift={0}
-        useScrollView={true}
-      />
+      <PagerView style={styles.viewPager} initialPage={0}>
+        {images.map((imageSrc, index) => (
+          <View style={styles.page} key={index}>
+            <Image source={{ uri: imageSrc }} style={styles.img} />
+          </View>
+        ))}
+      </PagerView>
 
-      {/* <Text>{name}</Text> */}
+      <View style={{ padding: 10 }}>
+        <Text style={{ fontFamily: "Rubik", fontSize: 28 }}>{name}</Text>
+        <Text
+          style={{
+            fontFamily: "Rubik",
+            fontSize: 22,
+            color: "#454343",
+            marginTop: 15,
+          }}
+        >
+          {`₹${price}`}
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Rubik",
+            fontSize: 12,
+            color: "#454343",
+            marginTop: 5,
+          }}
+        >
+          {`3 Bidders`}
+        </Text>
+
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
+          {["Electronics", "Laptop"].map((text, index) => (
+            <View
+              key={index}
+              style={{
+                paddingVertical: 5,
+                paddingHorizontal: 10,
+                marginRight: 5,
+                backgroundColor: "#F2E0FF",
+                borderRadius: 20,
+                borderColor: "#1e1e1e",
+                borderWidth: 1,
+              }}
+            >
+              <Text style={{ fontFamily: "Rubik", fontSize: 10 }}>{text}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={[styles.buttonContainer, { backgroundColor: "#FFF" }]}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={[styles.button, { color: "#1E1E1E" }]}>Go Back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.buttonContainer, { backgroundColor: "#724CF9" }]}
+        >
+          <Text style={[styles.button, { color: "#FFF" }]}>Bid</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
 
 export default ProductScreen;
 
-const CarouselCardItem = ({ item, index }) => {
-  return (
-    <View style={styles.container} key={index}>
-      <Image source={{ uri: item.imgUrl }} style={styles.image} />
-      <Text style={styles.header}>{item.title}</Text>
-      <Text style={styles.body}>{item.body}</Text>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
   },
-  container: {
-    backgroundColor: "white",
+  buttonsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 0,
+    marginVertical: 10,
+    fontFamily: "Rubik",
+  },
+  buttonContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 8,
+    backgroundColor: "#724CF9",
     borderRadius: 8,
-    width: ITEM_WIDTH,
-    paddingBottom: 40,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
+    shadowColor: "#1E1E1E",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
   },
-  image: {
-    width: ITEM_WIDTH,
-    height: 300,
-  },
-  header: {
-    color: "#222",
-    fontSize: 28,
-    fontWeight: "bold",
-    paddingLeft: 20,
-    paddingTop: 20,
-  },
-  body: {
-    color: "#222",
+  button: {
+    fontFamily: "Rubik",
+    margin: 12,
     fontSize: 18,
-    paddingLeft: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
+    style: "bold",
+  },
+  viewPager: {
+    height: PAGE_VIEW_HEIGHT,
+    backgroundColor: "#1E1E1E",
+  },
+  page: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  img: {
+    width: "100%",
+    aspectRatio: 1,
+    marginVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
   },
 });
 

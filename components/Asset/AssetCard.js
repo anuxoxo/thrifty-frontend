@@ -16,8 +16,11 @@ function AssetCard({ name, price, images, bookMarked = false, navigation }) {
     <TouchableOpacity
       style={styles.cardStyle}
       onPress={() => {
-        console.log(navigation);
-        navigation.navigate("ProductScreen", { name: name });
+        navigation.navigate("ProductScreen", {
+          name: name,
+          price: price,
+          images: images,
+        });
       }}
     >
       <View style={styles.bookmarkIcon}>
@@ -52,6 +55,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 5,
     borderRadius: 15,
+    shadowColor: "#1E1E1E",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    elevation: 2,
+    backgroundColor: "#fff",
   },
   cardImage: {
     width: CARD_WIDTH,

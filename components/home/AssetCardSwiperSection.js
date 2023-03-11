@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const dummyData = [
+export const dummyData = [
   {
+    id: 1,
     name: "HP Victus AMD Ryzen Laptop",
     price: "50000",
     images: [
@@ -57,6 +58,7 @@ const dummyData = [
     ],
   },
   {
+    id: 2,
     name: "Cracking the Coding Interview",
     price: "578",
     images: [
@@ -66,6 +68,67 @@ const dummyData = [
     ],
   },
   {
+    id: 3,
+    name: "Cards",
+    price: "50",
+    images: [
+      "https://picsum.photos/id/16/200/300",
+      "https://picsum.photos/id/17/200/300",
+      "https://picsum.photos/id/18/200/300",
+    ],
+  },
+  {
+    id: 4,
+    name: "HP Victus AMD Ryzen Laptop",
+    price: "50000",
+    images: [
+      "https://picsum.photos/id/11/200/300",
+      "https://picsum.photos/id/11/200/300",
+      "https://picsum.photos/id/12/200/300",
+    ],
+  },
+  {
+    id: 5,
+    name: "Cracking the Coding Interview",
+    price: "578",
+    images: [
+      "https://picsum.photos/id/13/200/300",
+      "https://picsum.photos/id/14/200/300",
+      "https://picsum.photos/id/15/200/300",
+    ],
+  },
+  {
+    id: 6,
+    name: "Cards",
+    price: "50",
+    images: [
+      "https://picsum.photos/id/16/200/300",
+      "https://picsum.photos/id/17/200/300",
+      "https://picsum.photos/id/18/200/300",
+    ],
+  },
+  {
+    id: 7,
+    name: "HP Victus AMD Ryzen Laptop",
+    price: "50000",
+    images: [
+      "https://picsum.photos/id/11/200/300",
+      "https://picsum.photos/id/11/200/300",
+      "https://picsum.photos/id/12/200/300",
+    ],
+  },
+  {
+    id: 8,
+    name: "Cracking the Coding Interview",
+    price: "578",
+    images: [
+      "https://picsum.photos/id/13/200/300",
+      "https://picsum.photos/id/14/200/300",
+      "https://picsum.photos/id/15/200/300",
+    ],
+  },
+  {
+    id: 9,
     name: "Cards",
     price: "50",
     images: [
