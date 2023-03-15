@@ -9,71 +9,121 @@ import {
   Button,
   TouchableOpacity,
   FlatList,
+  Animated,
+  ScrollView,
 } from "react-native";
 import { useRoute } from "@react-navigation/core";
 import PagerView from "react-native-pager-view";
 
-const PAGE_VIEW_HEIGHT = Dimensions.get("window").height * 0.7;
+const PAGE_VIEW_HEIGHT = Dimensions.get("window").height * 0.6;
 
 const ProductScreen = ({ navigation }) => {
   const { name, price, images } = useRoute().params;
 
+  const scrollY = React.useRef(new Animated.Value(0)).current;
+  const HEADER_HEIGHT = PAGE_VIEW_HEIGHT;
+  const HEADER_SCROLL_DISTANCE = HEADER_HEIGHT - 50;
+
+  const headerTranslateY = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, -HEADER_SCROLL_DISTANCE],
+    extrapolate: "clamp",
+  });
+
   return (
     <SafeAreaView style={styles.outerContainer}>
-      <PagerView style={styles.viewPager} initialPage={0}>
-        {images.map((imageSrc, index) => (
-          <View style={styles.page} key={index}>
-            <Image source={{ uri: imageSrc }} style={styles.img} />
+      <ScrollView>
+        {Platform.OS != "web" && (
+          // <Animated.View
+          //   style={{
+          //     position: "absolute",
+          //     top: 0,
+          //     left: 0,
+          //     right: 0,
+          //     height: HEADER_HEIGHT,
+          //     transform: [{ translateY: headerTranslateY }],
+          //   }}
+          // >
+          <PagerView style={styles.viewPager} initialPage={0}>
+            {images.map((imageSrc, index) => (
+              <View style={styles.page} key={index}>
+                <Image source={{ uri: imageSrc }} style={styles.img} />
+              </View>
+            ))}
+          </PagerView>
+          // </Animated.View>
+        )}
+
+        {/* <ScrollView
+        contentContainerStyle={{ paddingTop: HEADER_HEIGHT }}
+        scrollEventThrottle={4}
+        // onScroll={Animated.event(
+        //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        //   { useNativeDriver: true }
+        // )}
+      > */}
+        <View
+          style={{
+            padding: 10,
+            backgroundColor: "#FFF",
+            height: Dimensions.get("window").height,
+          }}
+        >
+          <Text style={{ fontFamily: "Rubik", fontSize: 28 }}>{name}</Text>
+          <Text
+            style={{
+              fontFamily: "Rubik",
+              fontSize: 22,
+              color: "#454343",
+              marginTop: 15,
+            }}
+          >
+            {`₹${price}`}
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Rubik",
+              fontSize: 12,
+              color: "#454343",
+              marginTop: 5,
+            }}
+          >
+            {`3 Bidders`}
+          </Text>
+
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
+            {["Electronics", "Laptop"].map((text, index) => (
+              <View
+                key={index}
+                style={{
+                  paddingVertical: 5,
+                  paddingHorizontal: 10,
+                  marginRight: 5,
+                  backgroundColor: "#F2E0FF",
+                  borderRadius: 20,
+                  borderColor: "#1e1e1e",
+                  borderWidth: 1,
+                }}
+              >
+                <Text style={{ fontFamily: "Rubik", fontSize: 10 }}>
+                  {text}
+                </Text>
+              </View>
+            ))}
           </View>
-        ))}
-      </PagerView>
-
-      <View style={{ padding: 10 }}>
-        <Text style={{ fontFamily: "Rubik", fontSize: 28 }}>{name}</Text>
-        <Text
-          style={{
-            fontFamily: "Rubik",
-            fontSize: 22,
-            color: "#454343",
-            marginTop: 15,
-          }}
-        >
-          {`₹${price}`}
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Rubik",
-            fontSize: 12,
-            color: "#454343",
-            marginTop: 5,
-          }}
-        >
-          {`3 Bidders`}
-        </Text>
-
-        <View style={{ flexDirection: "row", marginTop: 10 }}>
-          {["Electronics", "Laptop"].map((text, index) => (
-            <View
-              key={index}
-              style={{
-                paddingVertical: 5,
-                paddingHorizontal: 10,
-                marginRight: 5,
-                backgroundColor: "#F2E0FF",
-                borderRadius: 20,
-                borderColor: "#1e1e1e",
-                borderWidth: 1,
-              }}
-            >
-              <Text style={{ fontFamily: "Rubik", fontSize: 10 }}>{text}</Text>
-            </View>
-          ))}
         </View>
-      </View>
+      </ScrollView>
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
-          style={[styles.buttonContainer, { backgroundColor: "#FFF" }]}
+          style={[
+            styles.buttonContainer,
+            {
+              backgroundColor: "#FFF",
+              borderColor: "#1E1E1E",
+              borderWidth: 0.5,
+            },
+          ]}
           onPress={() => navigation.goBack()}
         >
           <Text style={[styles.button, { color: "#1E1E1E" }]}>Go Back</Text>

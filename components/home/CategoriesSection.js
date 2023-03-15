@@ -57,7 +57,9 @@ function CategoriesSection({ navigation }) {
 function RenderCategory({ item, navigation }) {
   return (
     <TouchableOpacity
-      style={{ flex: 1 }}
+      style={{
+        flex: 1,
+      }}
       onPress={() =>
         navigation.navigate("CategoryScreen", {
           ...item,
@@ -66,7 +68,15 @@ function RenderCategory({ item, navigation }) {
     >
       <ImageBackground source={item.illus} style={styles.button}>
         <View style={{ flex: 1, margin: 20 }}>
-          <Text style={{ textAlign: "center" }}>{item.label}</Text>
+          <Text
+            style={{
+              textAlign: "center",
+              fontFamily: "Rubik",
+              color: "#1E1E1E",
+            }}
+          >
+            {item.label}
+          </Text>
         </View>
       </ImageBackground>
     </TouchableOpacity>
@@ -89,13 +99,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 4,
-    shadowColor: "#1E1E1E",
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "black",
-    shadowOpacity: 0.4,
-    elevation: 3,
-    shadowRadius: 3,
     backgroundColor: "#fff",
+    elevation: 3,
   },
 });
 

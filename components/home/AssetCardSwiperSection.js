@@ -56,6 +56,8 @@ export const dummyData = [
       "https://picsum.photos/id/11/200/300",
       "https://picsum.photos/id/12/200/300",
     ],
+    cancelled: false,
+    status: "On Going",
   },
   {
     id: 2,
@@ -66,6 +68,8 @@ export const dummyData = [
       "https://picsum.photos/id/14/200/300",
       "https://picsum.photos/id/15/200/300",
     ],
+    cancelled: false,
+    status: "On Going",
   },
   {
     id: 3,
@@ -76,6 +80,8 @@ export const dummyData = [
       "https://picsum.photos/id/17/200/300",
       "https://picsum.photos/id/18/200/300",
     ],
+    cancelled: true,
+    status: "Cancelled",
   },
   {
     id: 4,
@@ -86,6 +92,8 @@ export const dummyData = [
       "https://picsum.photos/id/11/200/300",
       "https://picsum.photos/id/12/200/300",
     ],
+    cancelled: true,
+    status: "Failed",
   },
   {
     id: 5,
@@ -96,6 +104,8 @@ export const dummyData = [
       "https://picsum.photos/id/14/200/300",
       "https://picsum.photos/id/15/200/300",
     ],
+    cancelled: false,
+    status: "On Going",
   },
   {
     id: 6,
@@ -106,6 +116,8 @@ export const dummyData = [
       "https://picsum.photos/id/17/200/300",
       "https://picsum.photos/id/18/200/300",
     ],
+    cancelled: false,
+    status: "On Going",
   },
   {
     id: 7,
@@ -116,6 +128,8 @@ export const dummyData = [
       "https://picsum.photos/id/11/200/300",
       "https://picsum.photos/id/12/200/300",
     ],
+    cancelled: false,
+    status: "On Going",
   },
   {
     id: 8,
@@ -126,6 +140,8 @@ export const dummyData = [
       "https://picsum.photos/id/14/200/300",
       "https://picsum.photos/id/15/200/300",
     ],
+    cancelled: false,
+    status: "On Going",
   },
   {
     id: 9,
@@ -136,5 +152,7 @@ export const dummyData = [
       "https://picsum.photos/id/17/200/300",
       "https://picsum.photos/id/18/200/300",
     ],
+    cancelled: false,
+    status: "On Going",
   },
 ];

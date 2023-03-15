@@ -19,6 +19,7 @@ function HomeScreen({ navigation }) {
       <AssetCardSwiperSection navigation={navigation} label={"Featured"} />
       <AssetCardSwiperSection navigation={navigation} label={"New"} />
       <AssetCardSwiperSection navigation={navigation} label={"For You"} />
+      <View style={{ height: 40 }} />
     </ScrollView>
   );
 }
@@ -28,8 +29,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginHorizontal: 8,
-    // backgroundColor: "#fff",
+    backgroundColor: "#fff",
   },
   checkbox: {
     marginRight: 16,

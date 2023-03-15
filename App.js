@@ -18,9 +18,6 @@ import AuthContextProvider from "./store/authContext";
 
 import { manageToken } from "./utils";
 import { useFonts } from "expo-font";
-// import * as SplashScreen from "expo-splash-screen";
-
-// SplashScreen.preventAutoHideAsync();
 
 function Outlet() {
   const [currentStack, setCurrentStack] = useState(<Text>Loading...</Text>);
@@ -41,12 +38,6 @@ export default function App() {
     Poppins: require("./assets/fonts/Poppins-Medium.ttf"),
   });
 
-  // const onLayoutRootView = React.useCallback(async () => {
-  //   if (fontsLoaded) {
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [fontsLoaded]);
-
   if (!fontsLoaded) {
     return null;
   }
@@ -55,7 +46,8 @@ export default function App() {
     <AuthContextProvider>
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
-          <Outlet />
+          {/* <Outlet /> */}
+          <AuthenticatedStack />
         </SafeAreaView>
       </NavigationContainer>
     </AuthContextProvider>
