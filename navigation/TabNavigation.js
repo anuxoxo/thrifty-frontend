@@ -7,6 +7,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Foundation, Ionicons, Entypo, FontAwesome5 } from "@expo/vector-icons";
 import OrdersScreen from "../components/user/OrdersScreen";
 import { Picker } from "@react-native-picker/picker";
+import { Authcontext } from "../store/authContext";
 
 const Tab = createBottomTabNavigator();
 
@@ -62,6 +63,7 @@ function LogoTitle() {
 
 const UserMenu = () => {
   const pickerRef = React.useRef();
+  const { logout } = React.useContext(Authcontext);
 
   function openDropeDown() {
     pickerRef.current.focus();
@@ -75,9 +77,12 @@ const UserMenu = () => {
         style={{
           opacity: 0,
         }}
+        onValueChange={(itemValue, itemIndex) => {
+          itemValue == "logout" && logout();
+        }}
       >
         <Picker.Item label="My Profile" value="profile" />
-        <Picker.Item label="Logout" value="logout" />
+        <Picker.Item label="Logout" value="logout" onPress={logout} />
       </Picker>
     </TouchableOpacity>
   );

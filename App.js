@@ -46,8 +46,8 @@ export default function App() {
     <AuthContextProvider>
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
-          {/* <Outlet /> */}
-          <AuthenticatedStack />
+          <Outlet />
+          {/* <AuthenticatedStack /> */}
         </SafeAreaView>
       </NavigationContainer>
     </AuthContextProvider>

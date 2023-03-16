@@ -118,7 +118,9 @@ export default function AuthcontextProvider({ children }) {
     AsyncStorage.removeItem("THRIFTY_USER_ID");
     dispatch({ type: Types.AUTH_RESET });
     setTimeout(() => {
-      NativeModules.DevSettings.reload();
+      Platform.OS === "web"
+        ? window.location.reload()
+        : NativeModules.DevSettings.reload();
     }, 1000);
   }
 

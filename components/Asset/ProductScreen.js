@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useRoute } from "@react-navigation/core";
-import PagerView from "react-native-pager-view";
+// import PagerView from "react-native-pager-view";
 
 const PAGE_VIEW_HEIGHT = Dimensions.get("window").height * 0.6;
 
@@ -33,7 +33,7 @@ const ProductScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.outerContainer}>
       <ScrollView>
-        {Platform.OS != "web" && (
+        {/* {Platform.OS != "web" && (
           // <Animated.View
           //   style={{
           //     position: "absolute",
@@ -52,7 +52,7 @@ const ProductScreen = ({ navigation }) => {
             ))}
           </PagerView>
           // </Animated.View>
-        )}
+        )} */}
 
         {/* <ScrollView
         contentContainerStyle={{ paddingTop: HEADER_HEIGHT }}
