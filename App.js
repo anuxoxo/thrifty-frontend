@@ -1,12 +1,10 @@
 import * as React from "react";
-import { useLayoutEffect, useState, useEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
   Platform,
   Text,
-  View,
-  Button,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
@@ -29,7 +27,7 @@ function Outlet() {
     });
   }, []);
 
-  return <>{currentStack}</>;
+  return <>{currentStack}</>; s
 }
 
 export default function App() {
@@ -47,7 +45,7 @@ export default function App() {
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
           <Outlet />
-          {/* <AuthenticatedStack /> */}
+          {/* <AuthStack /> */}
         </SafeAreaView>
       </NavigationContainer>
     </AuthContextProvider>

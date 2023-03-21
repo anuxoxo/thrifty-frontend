@@ -1,16 +1,20 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, Text, Pressable } from "react-native";
 import SearchIcon from "../../assets/icons/SearchIcon";
 
-function SearchSection({ navigation }) {
+import { useNavigation } from "@react-navigation/native";
+
+function SearchSection() {
+  const navigation = useNavigation();
+
+  const openScreen = () => {
+    navigation.navigate("SearchScreen")
+  }
+
   return (
-    <View style={styles.searchSection}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search"
-        keyboardType="default"
-      />
+    <Pressable onPress={openScreen} style={styles.searchSection}>
+      <Text style={styles.input}>Search</Text>
       <SearchIcon />
-    </View>
+    </Pressable>
   );
 }
 
@@ -30,14 +34,11 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   input: {
-    height: 40,
-    margin: 10,
-    color: "#1E1E1E",
+    color: "#aaaa",
     fontSize: 15,
     fontFamily: "Rubik",
-    paddingLeft: 10,
+    paddingLeft: 15,
     outlineStyle: "none",
-    // width: "100%",
     flex: 1,
   },
 });

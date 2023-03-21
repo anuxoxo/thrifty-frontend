@@ -88,6 +88,7 @@ export default function AuthcontextProvider({ children }) {
       axios
         .get("/auth/google/")
         .then((response) => {
+          console.log(response)
           dispatch({
             type: Types.AUTH_SUCCESS,
             payload: response.data?.user,
@@ -97,7 +98,6 @@ export default function AuthcontextProvider({ children }) {
             "THRIFTY_USER_ID",
             response.data.user._id.toString()
           );
-
           setTimeout(() => {
             Platform.OS === "web"
               ? window.location.reload()
@@ -105,11 +105,10 @@ export default function AuthcontextProvider({ children }) {
           }, 1000);
         })
         .catch((error) => {
+          console.log(error)
           // return Object.keys(error.response?.data?.errors).map(key => {
           // })
         });
-    else {
-    }
   }
 
   function logout() {

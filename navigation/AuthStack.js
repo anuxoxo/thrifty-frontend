@@ -1,33 +1,14 @@
-import { useLayoutEffect, useState, useEffect, useContext } from "react";
-
-import {
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
-import React from "react";
-
-import logoText from "../assets/logoText.svg";
-import { StyleSheet } from "react-native-web";
-import { SvgXml } from "react-native-svg";
+import { useContext } from "react";
+import { View, Button, StyleSheet, Image } from "react-native";
 
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { Authcontext } from "../store/authContext";
 
-WebBrowser.maybeCompleteAuthSession();
+import illus1 from "../assets/images/login/illus1.png";
 
-const storeData = async (value) => {
-  try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem("@auth", jsonValue);
-  } catch (e) {
-    // saving error
-  }
-};
+WebBrowser.maybeCompleteAuthSession();
 
 export default function AuthStack() {
   const { googleAuth } = useContext(Authcontext);
@@ -46,7 +27,7 @@ export default function AuthStack() {
     const response = await googlePromptAsync();
     if (response?.type === "success") {
       const { authentication } = response;
-      await googleAuth(true, authentication.accessToken);
+      await googleAuth(true, authentication?.accessToken);
     } else {
       await googleAuth(false, null);
     }
@@ -54,6 +35,7 @@ export default function AuthStack() {
 
   return (
     <View style={styles.container}>
+      <Image source={{ uri: illus1 }} style={styles.img} />
       <Button
         style={{ width: 192, height: 48 }}
         disabled={!request}
@@ -89,5 +71,12 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginTop: 10,
+  },
+  img: {
+    width: "100%",
+    aspectRatio: 1,
+    marginVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
   },
 });

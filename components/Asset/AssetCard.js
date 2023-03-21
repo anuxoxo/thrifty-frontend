@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
 
@@ -59,12 +59,6 @@ export const AssetCard2 = ({
         });
       }}
     >
-      <Feather
-        name="info"
-        size={14}
-        color="#676767"
-        style={{ position: "absolute", bottom: 10, right: 10 }}
-      />
       <Image source={{ uri: images[0] }} style={styles2.cardImage} />
       <View style={styles2.cardContent}>
         <Text numberOfLines={1} style={styles2.cardTitle}>

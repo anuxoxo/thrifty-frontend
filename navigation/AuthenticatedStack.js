@@ -5,6 +5,7 @@ import TabNavigation from "./TabNavigation";
 import AddProduct from "../components/sell/AddProduct";
 import ProductScreen from "../components/Asset/ProductScreen";
 import CategoryScreen from "../components/Asset/CategoryScreen";
+import SearchScreen from "../components/home/SearchScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,11 @@ export default function AuthenticatedStack() {
         options={{ title: "Categories" }}
         name="CategoryScreen"
         component={CategoryScreen}
+      />
+      <Stack.Screen
+        options={{ title: "Search" }}
+        name="SearchScreen"
+        component={SearchScreen}
       />
     </Stack.Navigator>
   );
