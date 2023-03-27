@@ -87,7 +87,7 @@ export default function SearchContextProvider({ children }) {
           // console.log(err?.response?.data)
           dispatch({ type: Types.SEARCH_FAILED, payload: err?.response?.data?.errors });
           // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
-          reject(false)
+          resolve([])
         });
     })
   }
