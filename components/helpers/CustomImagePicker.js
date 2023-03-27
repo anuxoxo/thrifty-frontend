@@ -4,8 +4,7 @@ import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function CustomImagePicker() {
-  const [images, setImages] = useState([]);
+export default function CustomImagePicker({ images, setImages }) {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

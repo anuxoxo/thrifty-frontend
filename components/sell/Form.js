@@ -12,10 +12,10 @@ import React, { useState } from "react";
 import { categories } from "../../utils/data";
 import CheckboxText from "../helpers/CheckboxText";
 
-export default function Form() {
-  const [name, onChangeName] = useState("");
-  const [location, onChangeLocation] = useState("");
-  const [number, onChangeNumber] = useState("");
+export default function Form({ submitHandler }) {
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [amount, setAmount] = useState("");
 
   const [selectedCategory, setSelectedCategory] = useState([]);
 
@@ -25,22 +25,22 @@ export default function Form() {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        onChangeText={onChangeName}
+        onChangeText={setName}
         value={name}
         placeholder="Name"
         keyboardType="default"
       />
       <TextInput
         style={styles.input}
-        onChangeText={onChangeLocation}
+        onChangeText={setLocation}
         value={location}
         placeholder="Location"
         keyboardType="default"
       />
       <TextInput
         style={styles.input}
-        onChangeText={onChangeNumber}
-        value={number}
+        onChangeText={setAmount}
+        value={amount}
         placeholder="Price"
         keyboardType="numeric"
         inputMode="numeric"
@@ -58,10 +58,15 @@ export default function Form() {
         )}
         keyExtractor={(item) => item.id}
       />
-      <Pressable style={[styles.btnContainer, { width: dimension.width - 50 }]}>
+      <Pressable
+        onPress={() => {
+          const category = selectedCategory.map(e => e.label)
+          submitHandler({ name, location, amount, category })
+        }}
+        style={[styles.btnContainer, { width: dimension.width - 50 }]}>
         <Text style={{ color: "white", alignSelf: "center" }}>Submit</Text>
       </Pressable>
-    </View>
+    </View >
   );
 }
 

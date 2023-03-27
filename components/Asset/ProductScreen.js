@@ -146,6 +146,8 @@ const ProductScreen = ({ navigation }) => {
 
 export default ProductScreen;
 
+
+
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,

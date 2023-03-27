@@ -45,6 +45,8 @@ export const AssetCard2 = ({
   name,
   price,
   images,
+  category,
+  sellerId,
   bookMarked = false,
   navigation,
 }) => {

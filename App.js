@@ -13,6 +13,7 @@ import AuthStack from "./navigation/AuthStack";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
 
 import AuthContextProvider from "./store/authContext";
+import SellContextProvider from "./store/sellContext";
 
 import { manageToken } from "./utils";
 import { useFonts } from "expo-font";
@@ -27,7 +28,7 @@ function Outlet() {
     });
   }, []);
 
-  return <>{currentStack}</>; s
+  return <>{currentStack}</>;
 }
 
 export default function App() {
@@ -42,12 +43,13 @@ export default function App() {
 
   return (
     <AuthContextProvider>
-      <NavigationContainer>
-        <SafeAreaView style={styles.container}>
-          <Outlet />
-          {/* <AuthStack /> */}
-        </SafeAreaView>
-      </NavigationContainer>
+      <SellContextProvider>
+        <NavigationContainer>
+          <SafeAreaView style={styles.container}>
+            <Outlet />
+          </SafeAreaView>
+        </NavigationContainer>
+      </SellContextProvider>
     </AuthContextProvider>
   );
 }
