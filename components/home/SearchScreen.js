@@ -18,11 +18,13 @@ export default function SearchScreen() {
   }
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      searchByKeyword(searchInput)
-    }, 500)
+    if (searchInput) {
+      const delayDebounceFn = setTimeout(() => {
+        searchByKeyword(searchInput)
+      }, 500)
 
-    return () => clearTimeout(delayDebounceFn)
+      return () => clearTimeout(delayDebounceFn)
+    }
   }, [searchInput])
 
   return (
