@@ -14,6 +14,10 @@ import AuthStack from "./navigation/AuthStack";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
 
 import AuthContextProvider from "./store/authContext";
+import SellContextProvider from "./store/sellContext";
+import SearchContextProvider from "./store/searchContext";
+import BidContextProvider from "./store/bidContext";
+import OrderContextProvider from "./store/orderContext";
 
 import { manageToken } from "./utils";
 
@@ -33,11 +37,19 @@ function Outlet() {
 export default function App() {
   return (
     <AuthContextProvider>
-      <NavigationContainer>
-        <SafeAreaView style={styles.container}>
-          <Outlet />
-        </SafeAreaView>
-      </NavigationContainer>
+      <SellContextProvider>
+        <SearchContextProvider>
+          <BidContextProvider>
+            <OrderContextProvider>
+              <NavigationContainer>
+                <SafeAreaView style={styles.container}>
+                  <Outlet />
+                </SafeAreaView>
+              </NavigationContainer>
+            </OrderContextProvider>
+          </BidContextProvider>
+        </SearchContextProvider>
+      </SellContextProvider>
     </AuthContextProvider>
   );
 }
