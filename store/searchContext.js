@@ -70,22 +70,26 @@ export default function SearchContextProvider({ children }) {
     const token = await AsyncStorage.getItem(TOKEN_NAME);
     axios.defaults.headers.common["Authorization"] = token;
 
-    axios
-      .get("product/category/" + category + "/")
-      .then((res) => {
-        // console.log(res.data)
-        if (res.data?.success) {
-          dispatch({
-            type: Types.SEARCH_SUCCESS,
-            payload: res.data.products,
-          });
-        }
-      })
-      .catch((err) => {
-        // console.log(err?.response?.data)
-        dispatch({ type: Types.SEARCH_FAILED, payload: err?.response?.data?.errors });
-        // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
-      });
+    return new Promise(function (resolve, reject) {
+      axios
+        .get("product/category/" + category + "/")
+        .then((res) => {
+          // console.log(res.data)
+          if (res.data?.success) {
+            resolve(res.data.products)
+            dispatch({
+              type: Types.SEARCH_SUCCESS,
+              payload: res.data.products,
+            });
+          }
+        })
+        .catch((err) => {
+          // console.log(err?.response?.data)
+          dispatch({ type: Types.SEARCH_FAILED, payload: err?.response?.data?.errors });
+          // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
+          reject(false)
+        });
+    })
   }
 
   const value = {

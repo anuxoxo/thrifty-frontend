@@ -4,6 +4,7 @@ import AssetCard, { CARD_WIDTH } from "./AssetCard";
 const SPACING_FOR_CARD_INSET = Dimensions.get("window").width * 0.1 - 35;
 
 function AssetCardSwiper({ data = {}, navigation }) {
+  
   return (
     <ScrollView
       styles={styles.container}
@@ -28,8 +29,10 @@ function AssetCardSwiper({ data = {}, navigation }) {
         <AssetCard
           key={index}
           name={item.name}
-          price={item.price}
+          price={item.amount}
           images={item.images}
+          category={item.category}
+          sellerId={item.sellerId}
           navigation={navigation}
         />
       ))}

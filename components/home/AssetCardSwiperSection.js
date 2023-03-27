@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text } from "react-native";
 import AssetCardSwiper from "../Asset/AssetCardSwiper";
 
-function AssetCardSwiperSection({ label = "Assets", navigation }) {
+function AssetCardSwiperSection({ data = [], label = "Assets", navigation }) {
   return (
     <View style={styles.container}>
       <View
@@ -33,7 +33,7 @@ function AssetCardSwiperSection({ label = "Assets", navigation }) {
         </Text>
       </View>
 
-      <AssetCardSwiper data={dummyData} navigation={navigation} />
+      <AssetCardSwiper data={data} navigation={navigation} />
     </View>
   );
 }

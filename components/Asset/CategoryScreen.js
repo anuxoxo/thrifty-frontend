@@ -15,7 +15,6 @@ const CategoryScreen = ({ navigation }) => {
   const { loading, results, searchByCategory } = useContext(SearchContext)
 
   useEffect(() => {
-    console.log(label)
     searchByCategory(label);
   }, [])
 

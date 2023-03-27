@@ -4,7 +4,6 @@ import {
   View,
   Text,
   FlatList,
-  Image,
   ImageBackground,
 } from "react-native";
 
@@ -132,7 +131,7 @@ const categories = [
   },
   {
     id: 6,
-    label: "More",
+    label: "Others",
     illus: null,
   },
 ];
