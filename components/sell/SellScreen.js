@@ -3,12 +3,10 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  ScrollView,
   FlatList,
   TouchableOpacity,
 } from "react-native";
 import FloatingIcon from "../helpers/FloatingIcon";
-import { dummyData } from "../home/AssetCardSwiperSection";
 import { AssetCard2 } from "../Asset/AssetCard";
 
 import { SellContext } from "../../store/sellContext";
@@ -32,7 +30,7 @@ function SellScreen({ navigation }) {
           <FlatList
             data={productsListed}
             numColumns={1}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <RenderCategory item={item} navigation={navigation} />
             )}
