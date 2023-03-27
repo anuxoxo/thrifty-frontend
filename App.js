@@ -14,6 +14,7 @@ import AuthenticatedStack from "./navigation/AuthenticatedStack";
 
 import AuthContextProvider from "./store/authContext";
 import SellContextProvider from "./store/sellContext";
+import SearchContextProvider from "./store/searchContext";
 
 import { manageToken } from "./utils";
 import { useFonts } from "expo-font";
@@ -44,11 +45,13 @@ export default function App() {
   return (
     <AuthContextProvider>
       <SellContextProvider>
-        <NavigationContainer>
-          <SafeAreaView style={styles.container}>
-            <Outlet />
-          </SafeAreaView>
-        </NavigationContainer>
+        <SearchContextProvider>
+          <NavigationContainer>
+            <SafeAreaView style={styles.container}>
+              <Outlet />
+            </SafeAreaView>
+          </NavigationContainer>
+        </SearchContextProvider>
       </SellContextProvider>
     </AuthContextProvider>
   );
