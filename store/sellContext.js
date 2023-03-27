@@ -68,7 +68,6 @@ export default function SellContextProvider({ children }) {
   }
 
   async function addProductToSell(data) {
-    console.log(data)
     const token = await AsyncStorage.getItem(TOKEN_NAME);
     axios.defaults.headers.common["Authorization"] = token;
 
@@ -89,10 +88,34 @@ export default function SellContextProvider({ children }) {
     });
   }
 
+  async function deleteProductToSell(id) {
+    const token = await AsyncStorage.getItem(TOKEN_NAME);
+    axios.defaults.headers.common["Authorization"] = token;
+
+    return new Promise(function (resolve, reject) {
+      axios
+        .delete("/product/" + id + "/")
+        .then((res) => {
+          // console.log(res.data)
+          if (res.data?.success) {
+            fetchSellListings();
+            resolve(true);
+          }
+        })
+        .catch((err) => {
+          // console.log(err?.response?.data)
+          resolve(false);
+        });
+    });
+  }
+
+
+
   const value = {
     ...state,
     fetchSellListings,
-    addProductToSell
+    addProductToSell,
+    deleteProductToSell
   };
 
   return <SellContext.Provider value={value}>{children}</SellContext.Provider>;

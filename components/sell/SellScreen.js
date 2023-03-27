@@ -55,6 +55,7 @@ function RenderCategory({ item, navigation }) {
     >
       <AssetCard2
         key={item._id}
+        id={item._id}
         name={item.name}
         price={item.amount}
         images={item.images}

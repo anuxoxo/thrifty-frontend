@@ -6,20 +6,25 @@ import {
   Dimensions,
   TouchableOpacity
 } from "react-native";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { useContext } from "react";
+
+import { SellContext } from "../../store/sellContext";
 
 export const CARD_WIDTH = Dimensions.get("window").width * 0.4;
 const CARD_HEIGHT = CARD_WIDTH * 1.1;
 
-function AssetCard({ name, price, images, bookMarked = false, navigation }) {
+function AssetCard({ name, price, images, category, sellerId, bookMarked = false, navigation }) {
   return (
     <TouchableOpacity
       style={styles.cardStyle}
       onPress={() => {
         navigation.navigate("ProductScreen", {
-          name: name,
-          price: price,
-          images: images,
+          name,
+          price,
+          images,
+          category,
+          sellerId
         });
       }}
     >
@@ -42,6 +47,7 @@ function AssetCard({ name, price, images, bookMarked = false, navigation }) {
 }
 
 export const AssetCard2 = ({
+  id,
   name,
   price,
   images,
@@ -50,14 +56,19 @@ export const AssetCard2 = ({
   bookMarked = false,
   navigation,
 }) => {
+  const { deleteProductToSell } = useContext(SellContext);
+
   return (
     <TouchableOpacity
       style={styles2.cardStyle}
       onPress={() => {
         navigation.navigate("ProductScreen", {
-          name: name,
-          price: price,
-          images: images,
+          id,
+          name,
+          price,
+          images,
+          category,
+          sellerId
         });
       }}
     >
@@ -68,6 +79,15 @@ export const AssetCard2 = ({
         </Text>
         <Text style={styles2.cardPrice}>{`₹${price}`}</Text>
       </View>
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          right: 20,
+          top: 33
+        }}
+        onPress={async () => { await deleteProductToSell(id) }}>
+        <MaterialIcons name="delete" size={24} color="black" />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 };

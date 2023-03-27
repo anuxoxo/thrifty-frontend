@@ -18,7 +18,7 @@ import PagerView from "react-native-pager-view";
 const PAGE_VIEW_HEIGHT = Dimensions.get("window").height * 0.6;
 
 const ProductScreen = ({ navigation }) => {
-  const { name, price, images } = useRoute().params;
+  const { name, price, images, category, sellerId } = useRoute().params;
 
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const HEADER_HEIGHT = PAGE_VIEW_HEIGHT;
