@@ -138,5 +138,5 @@ export default function BidContextProvider({ children }) {
     rejectBid
   };
 
-  return <BidContextProvider.Provider value={value}>{children}</BidContextProvider.Provider>;
+  return <BidContext.Provider value={value}>{children}</BidContext.Provider>;
 }
