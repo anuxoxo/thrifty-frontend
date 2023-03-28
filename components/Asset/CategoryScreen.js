@@ -1,25 +1,21 @@
 import { useContext, useEffect } from "react";
-import {
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AssetCard from "../Asset/AssetCard";
 
 import { SearchContext } from "../../store/searchContext";
+import CircularLoader from "../common/CircularLoader";
 
 const CategoryScreen = ({ navigation }) => {
   const { id, label } = useRoute().params;
-  const { loading, results, searchByCategory } = useContext(SearchContext)
+  const { loading, results, searchByCategory } = useContext(SearchContext);
 
   useEffect(() => {
     searchByCategory(label);
-  }, [])
+  }, []);
 
   return (
-    <View>
+    <View style={{ backgroundColor: "#fff", height: "100%" }}>
       <View
         style={{
           width: "100%",
@@ -29,9 +25,10 @@ const CategoryScreen = ({ navigation }) => {
       >
         <Text style={{ fontFamily: "Rubik", fontSize: 20 }}>{label}</Text>
       </View>
-      {loading
-        ? <Text>Loading...</Text>
-        : <FlatList
+      {loading ? (
+        <CircularLoader />
+      ) : (
+        <FlatList
           data={results}
           numColumns={2}
           keyExtractor={(item) => item._id}
@@ -39,7 +36,8 @@ const CategoryScreen = ({ navigation }) => {
             <RenderCategory item={item} navigation={navigation} />
           )}
           style={{ marginHorizontal: 8 }}
-        />}
+        />
+      )}
     </View>
   );
 };

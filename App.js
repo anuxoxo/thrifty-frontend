@@ -14,9 +14,10 @@ import BidContextProvider from "./store/bidContext";
 
 import { manageToken } from "./utils";
 import { useFonts } from "expo-font";
+import CircularLoader from "./components/common/CircularLoader";
 
 function Outlet() {
-  const [currentStack, setCurrentStack] = useState(<Text>Loading...</Text>);
+  const [currentStack, setCurrentStack] = useState(<CircularLoader />);
 
   useLayoutEffect(() => {
     manageToken().then((token) => {

@@ -15,6 +15,7 @@ import { SellContext } from "../../store/sellContext";
 import { dummyData } from "../home/AssetCardSwiperSection";
 import SubText from "../common/SubText";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
+import CircularLoader from "../common/CircularLoader";
 
 function SellScreen({ navigation }) {
   const { loading, productsListed, fetchSellListings } =
@@ -31,7 +32,7 @@ function SellScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.outerContainer}>
       {loading ? (
-        <Text>Loading...</Text>
+        <CircularLoader />
       ) : (
         <>
           <FlatList
