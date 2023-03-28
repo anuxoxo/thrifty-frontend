@@ -1,6 +1,11 @@
 import * as React from "react";
 import { useLayoutEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Platform, Text } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Platform,
+  Text,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -8,6 +13,9 @@ import AuthStack from "./navigation/AuthStack";
 import AuthenticatedStack from "./navigation/AuthenticatedStack";
 
 import AuthContextProvider from "./store/authContext";
+import SellContextProvider from "./store/sellContext";
+import SearchContextProvider from "./store/searchContext";
+import BidContextProvider from "./store/bidContext";
 
 import { manageToken } from "./utils";
 import { useFonts } from "expo-font";
@@ -23,7 +31,6 @@ function Outlet() {
   }, []);
 
   return <>{currentStack}</>;
-  s;
 }
 
 export default function App() {
@@ -38,12 +45,17 @@ export default function App() {
 
   return (
     <AuthContextProvider>
-      <NavigationContainer>
-        <SafeAreaView style={styles.container}>
-          {/* <Outlet /> */}
-          <AuthenticatedStack />
-        </SafeAreaView>
-      </NavigationContainer>
+      <SellContextProvider>
+        <SearchContextProvider>
+          <BidContextProvider>
+            <NavigationContainer>
+              <SafeAreaView style={styles.container}>
+                <Outlet />
+              </SafeAreaView>
+            </NavigationContainer>
+          </BidContextProvider>
+        </SearchContextProvider>
+      </SellContextProvider>
     </AuthContextProvider>
   );
 }

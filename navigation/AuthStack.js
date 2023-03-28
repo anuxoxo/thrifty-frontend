@@ -6,7 +6,7 @@ import * as WebBrowser from "expo-web-browser";
 
 import { Authcontext } from "../store/authContext";
 
-import illus1 from "../assets/images/login/illus1.png";
+// import illus1 from "../assets/images/login/illus1.png";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -36,7 +36,7 @@ export default function AuthStack() {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: illus1 }} style={styles.img} />
+      {/* <Image source={{ uri: illus1 }} style={styles.img} /> */}
       <Button
         style={{ width: 192, height: 48 }}
         disabled={!request}

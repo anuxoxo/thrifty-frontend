@@ -1,18 +1,31 @@
-import { View, StyleSheet, TextInput, SafeAreaView, FlatList, TouchableOpacity, useWindowDimensions } from 'react-native'
-import React, { useState } from 'react'
-import SearchIcon from "../../assets/icons/SearchIcon";
+import { View, StyleSheet, TextInput, SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 
-import { dummyData } from "../home/AssetCardSwiperSection";
+import SearchIcon from "../../assets/icons/SearchIcon";
+
 import { AssetCard2 } from '../Asset/AssetCard';
+
+import { SearchContext } from "../../store/searchContext"
 
 export default function SearchScreen() {
   const navigation = useNavigation();
+  const { loading, results, searchByKeyword } = useContext(SearchContext);
   const [searchInput, setSearchInput] = useState("");
 
   const onChangeHandler = (text) => {
     setSearchInput(text);
   }
+
+  useEffect(() => {
+    if (searchInput) {
+      const delayDebounceFn = setTimeout(() => {
+        searchByKeyword(searchInput)
+      }, 500)
+
+      return () => clearTimeout(delayDebounceFn)
+    }
+  }, [searchInput])
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -31,22 +44,22 @@ export default function SearchScreen() {
           placeholder={"Search"}
         />
       </View>
-      <FlatList
-        data={dummyData.slice(0, 3)}
-        numColumns={1}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <RenderCategory item={item} navigation={navigation} />
-        )}
-        style={{ width: "100%" }}
-      />
+      {loading
+        ? <Text>Loading...</Text>
+        : <FlatList
+          data={results}
+          numColumns={1}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <RenderCategory item={item} navigation={navigation} />
+          )}
+          style={{ width: "100%" }}
+        />}
     </SafeAreaView>
   )
 }
 
 function RenderCategory({ item, navigation }) {
-  const dimensions = useWindowDimensions();
-
   return (
     <TouchableOpacity
       style={{ flex: 1, width: "100%" }}
@@ -57,10 +70,12 @@ function RenderCategory({ item, navigation }) {
       }
     >
       <AssetCard2
-        key={item.id}
+        key={item._id}
         name={item.name}
-        price={item.price}
+        price={item.amount}
         images={item.images}
+        category={item.category}
+        sellerId={item.sellerId}
         navigation={navigation}
       />
     </TouchableOpacity>

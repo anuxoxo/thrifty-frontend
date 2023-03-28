@@ -1,33 +1,44 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Text,
   StyleSheet,
   SafeAreaView,
-  ScrollView,
   FlatList,
   TouchableOpacity,
 } from "react-native";
 import FloatingIcon from "../helpers/FloatingIcon";
-import { dummyData } from "../home/AssetCardSwiperSection";
 import { AssetCard2 } from "../Asset/AssetCard";
 
+import { SellContext } from "../../store/sellContext";
+
 function SellScreen({ navigation }) {
+  const { loading, productsListed, fetchSellListings } = useContext(SellContext);
+
+  useEffect(() => {
+    fetchSellListings();
+  }, [])
+
   function addPressHandler() {
     navigation.navigate("AddProduct");
   }
 
   return (
     <SafeAreaView style={styles.outerContainer}>
-      <FlatList
-        data={dummyData.slice(0, 3)}
-        numColumns={1}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <RenderCategory item={item} navigation={navigation} />
-        )}
-        style={{ marginHorizontal: 8, width: "100%" }}
-      />
-      <FloatingIcon pressHandler={addPressHandler} />
+      {loading
+        ? <Text>Loading...</Text>
+        : <>
+          <FlatList
+            data={productsListed}
+            numColumns={1}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <RenderCategory item={item} navigation={navigation} />
+            )}
+            style={{ marginHorizontal: 8, width: "100%" }}
+          />
+          <FloatingIcon pressHandler={addPressHandler} />
+        </>
+      }
     </SafeAreaView>
   );
 }
@@ -43,10 +54,13 @@ function RenderCategory({ item, navigation }) {
       }
     >
       <AssetCard2
-        key={item.id}
+        key={item._id}
+        id={item._id}
         name={item.name}
-        price={item.price}
+        price={item.amount}
         images={item.images}
+        category={item.category}
+        sellerId={item.sellerId}
         navigation={navigation}
       />
     </TouchableOpacity>

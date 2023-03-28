@@ -1,24 +1,41 @@
-import React from "react";
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { useContext, useEffect, useState } from "react";
+
 import SearchSection from "./SearchSection";
 import CategoriesSection from "./CategoriesSection";
 import AssetCardSwiperSection from "./AssetCardSwiperSection";
 
+import { SearchContext } from "../../store/searchContext";
+
 function HomeScreen({ navigation }) {
+  const [data, setData] = useState({
+    "Electronics": [],
+    "Furniture": [],
+    "Others": []
+  })
+  const { searchByCategory } = useContext(SearchContext)
+
+  async function getCategoryData(category) {
+    const res = await searchByCategory(category)
+    setData(prev => ({
+      ...prev,
+      [category]: res
+    }))
+  }
+
+  useEffect(() => {
+    getCategoryData("Electronics");
+    getCategoryData("Furniture");
+    getCategoryData("Others");
+  }, [])
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <SearchSection />
       <CategoriesSection navigation={navigation} />
-      <AssetCardSwiperSection navigation={navigation} label={"Featured"} />
-      <AssetCardSwiperSection navigation={navigation} label={"New"} />
-      <AssetCardSwiperSection navigation={navigation} label={"For You"} />
+      <AssetCardSwiperSection data={data["Electronics"]} navigation={navigation} label={"Electronics"} />
+      <AssetCardSwiperSection data={data["Furniture"]} navigation={navigation} label={"Furniture"} />
+      <AssetCardSwiperSection data={data["Others"]} navigation={navigation} label={"Others"} />
       <View style={{ height: 40 }} />
     </ScrollView>
   );
