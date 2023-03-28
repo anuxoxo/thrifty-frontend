@@ -3,10 +3,20 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../components/home/HomeScreen";
 import SellScreen from "../components/sell/SellScreen";
 import ThriftyLogo from "../assets/icons/ThriftyLogo.js";
-import { StyleSheet, TouchableOpacity, View, FlatList, Text, Modal, Image } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  FlatList,
+  Text,
+  Modal,
+  Image,
+  Pressable,
+} from "react-native";
 import { Foundation, Ionicons, Entypo, FontAwesome5 } from "@expo/vector-icons";
 import OrdersScreen from "../components/user/OrdersScreen";
 import { Authcontext } from "../store/authContext";
+import SubText from "../components/common/SubText";
 
 const Tab = createBottomTabNavigator();
 
@@ -62,69 +72,75 @@ function LogoTitle() {
 
 const UserMenu = () => {
   const { user, logout } = React.useContext(Authcontext);
+  const [modalVisible, setModalVisible] = React.useState(false);
 
-  //hooks
-  const DropdownButton = React.useRef();
-  const [dropdownTop, setDropdownTop] = React.useState(0);
-  const [visible, setVisible] = React.useState(false);
-  const [selected, setSelected] = React.useState(undefined);
-
-  // Dropdown List Data
   const data = [
-    { id: 1, label: 'My profile', color: "#0E0E0E" },
-    { id: 2, label: 'Logout', color: "#FF0E0E", functionCall: logout },
+    { id: 1, label: "My profile", color: "#0E0E0E" },
+    { id: 2, label: "Logout", color: "#FF0E0E", functionCall: logout },
   ];
 
-  const toggleDropdown = () => {
-    visible ? setVisible(false) : openDropdown();
-  };
-
-  const openDropdown = () => {
-    DropdownButton?.current?.measure((_fx, _fy, _w, h, _px, py) => {
-      setDropdownTop(py + h);
-    });
-    setVisible(true);
-  };
-
-  const onItemPress = (item) => {
-    setSelected(item);
-    item?.functionCall();
-    setVisible(false);
-  };
-
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.item} onPress={() => onItemPress(item)}>
-      <Text style={{ color: item?.color }}>{item.label}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderDropdown = () => {
-    return (
-      <Modal visible={visible} transparent animationType="fade">
-        <TouchableOpacity
-          style={styles.overlay}
-          onPress={() => setVisible(false)}
-        >
-          <View style={[styles.dropdown, { top: dropdownTop, right: 0 }]}>
-            <FlatList
-              data={data}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
-        </TouchableOpacity>
-      </Modal>
-    );
-  }
-
   return (
-    <TouchableOpacity onPress={openDropdown} style={styles.user} ref={DropdownButton}>
-      {renderDropdown()}
-      {user?.picture
-        ? <Image style={{ width: 26, aspectRatio: 1 }} source={{ uri: user?.picture }} />
-        : <FontAwesome5 name="user-circle" size={24} color="#1E1E1E" />
-      }
-    </TouchableOpacity>
+    <>
+      <DialogModal
+        visible={modalVisible}
+        data={data}
+        onClose={() => {
+          setModalVisible(false);
+        }}
+      />
+      <TouchableOpacity
+        onPress={() => {
+          setModalVisible(true);
+        }}
+        style={styles.user}
+      >
+        {user?.picture ? (
+          <Image
+            style={{ width: 26, aspectRatio: 1 }}
+            source={{ uri: user?.picture }}
+          />
+        ) : (
+          <FontAwesome5 name="user-circle" size={24} color="#1E1E1E" />
+        )}
+      </TouchableOpacity>
+    </>
+  );
+};
+
+// User Actions Popup Dialog Box with Dark Blurry background
+const DialogModal = ({ visible, data, onClose }) => {
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <Pressable onPress={onClose} style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <FlatList
+            data={data}
+            style={{ width: "100%" }}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.modalItem}
+                onPress={() => {
+                  item.functionCall && item.functionCall();
+                  onClose();
+                }}
+              >
+                <SubText
+                  text={item.label}
+                  family="Poppins"
+                  color={item?.color}
+                />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </Pressable>
+    </Modal>
   );
 };
 
@@ -133,39 +149,48 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#efefef',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#efefef",
     height: 50,
     zIndex: 1,
   },
   buttonText: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
   },
   icon: {
     marginRight: 10,
   },
-  dropdown: {
-    position: 'absolute',
-    backgroundColor: '#fff',
-    width: 200,
-    shadowColor: '#000000',
-    shadowRadius: 4,
-    shadowOffset: { height: 4, width: 0 },
-    shadowOpacity: 0.5,
-    borderRadius: 8.5,
-    right: 0
-  },
-  overlay: {
-    width: 200,
-    height: '100%',
-  },
-  item: {
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
     paddingHorizontal: 10,
-    paddingVertical: 10,
+  },
+  modalView: {
+    width: "100%",
+    height: "auto",
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingVertical: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalItem: {
+    width: "100%",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
     borderBottomWidth: 1,
-    display: "flex",
-    justifyContent: "flex-end"
+    borderBottomColor: "#efefef",
   },
 });

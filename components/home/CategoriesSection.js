@@ -44,6 +44,7 @@ function CategoriesSection({ navigation }) {
         data={categories}
         numColumns={2}
         keyExtractor={(item) => item.id}
+        scrollEnabled={false}
         renderItem={({ item }) => (
           <RenderCategory item={item} navigation={navigation} />
         )}
