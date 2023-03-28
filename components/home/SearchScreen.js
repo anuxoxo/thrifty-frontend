@@ -1,12 +1,21 @@
-import { View, StyleSheet, TextInput, SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native'
-import React, { useState, useContext, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  SafeAreaView,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 import SearchIcon from "../../assets/icons/SearchIcon";
 
-import { AssetCard2 } from '../Asset/AssetCard';
+import { AssetCard2 } from "../Asset/AssetCard";
 
-import { SearchContext } from "../../store/searchContext"
+import { SearchContext } from "../../store/searchContext";
 
 export default function SearchScreen() {
   const navigation = useNavigation();
@@ -15,17 +24,17 @@ export default function SearchScreen() {
 
   const onChangeHandler = (text) => {
     setSearchInput(text);
-  }
+  };
 
   useEffect(() => {
     if (searchInput) {
       const delayDebounceFn = setTimeout(() => {
-        searchByKeyword(searchInput)
-      }, 500)
+        searchByKeyword(searchInput);
+      }, 500);
 
-      return () => clearTimeout(delayDebounceFn)
+      return () => clearTimeout(delayDebounceFn);
     }
-  }, [searchInput])
+  }, [searchInput]);
 
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -44,9 +53,10 @@ export default function SearchScreen() {
           placeholder={"Search"}
         />
       </View>
-      {loading
-        ? <Text>Loading...</Text>
-        : <FlatList
+      {loading ? (
+        <ActivityIndicator size="large" color="#724CF9" />
+      ) : (
+        <FlatList
           data={results}
           numColumns={1}
           keyExtractor={(item) => item._id}
@@ -54,9 +64,10 @@ export default function SearchScreen() {
             <RenderCategory item={item} navigation={navigation} />
           )}
           style={{ width: "100%" }}
-        />}
+        />
+      )}
     </SafeAreaView>
-  )
+  );
 }
 
 function RenderCategory({ item, navigation }) {
@@ -85,7 +96,7 @@ function RenderCategory({ item, navigation }) {
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: "#fff",
-    flex: 1
+    flex: 1,
   },
   inputContainer: {
     flexDirection: "row",
@@ -96,11 +107,11 @@ const styles = StyleSheet.create({
     height: 50,
     paddingRight: 10,
     marginVertical: 20,
-    marginHorizontal: 15
+    marginHorizontal: 15,
   },
   icon: {
     paddingHorizontal: 15,
-    width: 50
+    width: 50,
   },
   input: {
     width: "100%",
@@ -108,4 +119,4 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     fontSize: 16,
   },
-})
+});

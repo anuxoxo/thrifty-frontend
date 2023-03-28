@@ -65,8 +65,8 @@ function RenderCategory({ item, navigation }) {
             backgroundColor: "#724CF9",
             paddingVertical: 10,
             paddingHorizontal: 20,
+            marginHorizontal: 5,
             borderRadius: 8,
-            margin: 5,
             width: "auto",
           }}
           onPress={() => {
@@ -74,6 +74,22 @@ function RenderCategory({ item, navigation }) {
           }}
         >
           <SubText text={"Pay Now"} size={12} color={"#fff"} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#fff",
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            marginHorizontal: 5,
+            borderRadius: 8,
+            width: "auto",
+            borderWidth: 1,
+          }}
+          onPress={() => {
+            return;
+          }}
+        >
+          <SubText text={"Cancel"} size={12} color={"#0e0e0e"} />
         </TouchableOpacity>
       </View>
 
@@ -146,7 +162,10 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   cardAction: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
+    width: "auto",
+    marginHorizontal: 8,
+    marginVertical: 8,
   },
   gradient: {
     position: "absolute",
@@ -157,8 +176,8 @@ const styles = StyleSheet.create({
   },
   status: {
     position: "absolute",
-    bottom: 12,
-    right: 12,
+    bottom: 10,
+    left: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
