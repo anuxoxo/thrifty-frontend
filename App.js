@@ -1,11 +1,6 @@
 import * as React from "react";
 import { useLayoutEffect, useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Platform,
-  Text,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Platform, Text } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -50,7 +45,8 @@ export default function App() {
           <BidContextProvider>
             <NavigationContainer>
               <SafeAreaView style={styles.container}>
-                <Outlet />
+                {/* <Outlet /> */}
+                <AuthenticatedStack />
               </SafeAreaView>
             </NavigationContainer>
           </BidContextProvider>
