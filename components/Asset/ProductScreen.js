@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/core";
 import PagerView from "react-native-pager-view";
-import SubText from "..//common/SubText";
+import SubText from "../common";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 const PAGE_VIEW_HEIGHT = Dimensions.get("window").height * 0.6;
