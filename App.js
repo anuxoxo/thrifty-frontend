@@ -45,8 +45,8 @@ export default function App() {
           <BidContextProvider>
             <NavigationContainer>
               <SafeAreaView style={styles.container}>
-                {/* <Outlet /> */}
-                <AuthenticatedStack />
+                <Outlet />
+                {/* <AuthenticatedStack /> */}
               </SafeAreaView>
             </NavigationContainer>
           </BidContextProvider>
