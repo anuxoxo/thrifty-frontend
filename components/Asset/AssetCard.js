@@ -55,6 +55,7 @@ export const AssetCard2 = ({
   sellerId,
   bookMarked = false,
   navigation,
+  deleteEnabled = false
 }) => {
   const { deleteProductToSell } = useContext(SellContext);
 
@@ -79,15 +80,17 @@ export const AssetCard2 = ({
         </Text>
         <Text style={styles2.cardPrice}>{`₹${price}`}</Text>
       </View>
-      <TouchableOpacity
-        style={{
-          position: "absolute",
-          right: 20,
-          top: 33
-        }}
-        onPress={async () => { await deleteProductToSell(id) }}>
-        <MaterialIcons name="delete" size={24} color="black" />
-      </TouchableOpacity>
+      {deleteEnabled
+        ? <TouchableOpacity
+          style={{
+            position: "absolute",
+            right: 20,
+            top: 33
+          }}
+          onPress={async () => { await deleteProductToSell(id) }}>
+          <MaterialIcons name="delete" size={24} color="black" />
+        </TouchableOpacity>
+        : null}
     </TouchableOpacity>
   );
 };
