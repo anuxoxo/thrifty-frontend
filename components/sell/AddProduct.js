@@ -1,7 +1,7 @@
-import { StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet, SafeAreaView } from "react-native";
 
-import ImagePicker from '../helpers/ImagePicker'
-import Form from './Form'
+import ImagePicker from "../helpers/ImagePicker";
+import Form from "./Form";
 
 const AddProduct = () => {
   return (
@@ -9,13 +9,13 @@ const AddProduct = () => {
       <ImagePicker />
       <Form />
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default AddProduct
+export default AddProduct;
 
 const styles = StyleSheet.create({
   outerContainer: {
-    flex: 1
+    flex: 1,
   },
-})
+});

@@ -14,7 +14,8 @@ export default function AuthStack() {
   const { googleAuth } = useContext(Authcontext);
 
   const [request, response, googlePromptAsync] = Google.useAuthRequest({
-    expoClientId: "115982844469-7er3tdt57hdhokpucif9qut022sm6arj.apps.googleusercontent.com",
+    expoClientId:
+      "115982844469-7er3tdt57hdhokpucif9qut022sm6arj.apps.googleusercontent.com",
     iosClientId:
       "115982844469-4e8glphqom724b0o0se5l490nhacs0hf.apps.googleusercontent.com",
     androidClientId:
