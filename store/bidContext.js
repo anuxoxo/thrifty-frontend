@@ -52,7 +52,7 @@ export default function BidContextProvider({ children }) {
     axios
       .get("/bid/seller/" + user?._id + "/" + productId + "/")
       .then((res) => {
-        // console.log(res.data)
+        // console.log(res.data);
         if (res.data?.success) {
           dispatch({
             type: Types.BIDS_SUCCESS,
@@ -61,7 +61,7 @@ export default function BidContextProvider({ children }) {
         }
       })
       .catch((err) => {
-        // console.log(err?.response?.data)
+        // console.log(err?.response?.data);
         dispatch({
           type: Types.BIDS_FAILED,
           payload: err?.response?.data?.errors,
