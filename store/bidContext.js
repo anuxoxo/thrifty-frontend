@@ -73,7 +73,7 @@ export default function BidContextProvider({ children }) {
 
     return new Promise(function (resolve, reject) {
       axios
-        .post("/bid/create/", data)
+        .post("/bid/create/", { ...data, buyerId: user?._id })
         .then((res) => {
           // console.log(res.data)
           if (res.data?.success) {

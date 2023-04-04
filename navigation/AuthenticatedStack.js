@@ -6,6 +6,7 @@ import AddProduct from "../components/sell/AddProduct";
 import ProductScreen from "../components/Asset/ProductScreen";
 import CategoryScreen from "../components/Asset/CategoryScreen";
 import SearchScreen from "../components/home/SearchScreen";
+import Success from "../components/common/Success"
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,14 @@ export default function AuthenticatedStack() {
         options={{ title: "Search" }}
         name="SearchScreen"
         component={SearchScreen}
+      />
+      <Stack.Screen
+        options={{
+          title: "Success", headerShown: false,
+          contentStyle: { backgroundColor: "white" }
+        }}
+        name="Success"
+        component={Success}
       />
     </Stack.Navigator>
   );

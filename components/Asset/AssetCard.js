@@ -22,6 +22,7 @@ function AssetCard({
   sellerId,
   bookMarked = false,
   navigation,
+  ...rest
 }) {
   return (
     <TouchableOpacity
@@ -33,6 +34,7 @@ function AssetCard({
           images,
           category,
           sellerId,
+          ...rest
         });
       }}
     >

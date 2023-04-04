@@ -88,6 +88,7 @@ function RenderCategory({ item, navigation }) {
         category={item.category}
         sellerId={item.sellerId}
         navigation={navigation}
+        {...item}
       />
     </TouchableOpacity>
   );

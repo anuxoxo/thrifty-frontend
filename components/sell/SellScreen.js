@@ -69,11 +69,11 @@ function RenderCategory({ item, navigation }) {
         shadowRadius: 3,
         elevation: 3,
       }}
-      // onPress={() =>
-      //   navigation.navigate("ProductScreen", {
-      //     ...item,
-      //   })
-      // }
+    // onPress={() =>
+    //   navigation.navigate("ProductScreen", {
+    //     ...item,
+    //   })
+    // }
     >
       <SellCard
         key={item._id}
@@ -85,6 +85,7 @@ function RenderCategory({ item, navigation }) {
         sellerId={item.sellerId}
         navigation={navigation}
         deleteEnabled
+        {...item}
       />
 
       <TouchableOpacity
@@ -147,6 +148,7 @@ export const SellCard = ({
   bookMarked = false,
   navigation,
   deleteEnabled = false,
+  ...rest
 }) => {
   const { deleteProductToSell } = useContext(SellContext);
 
@@ -161,6 +163,7 @@ export const SellCard = ({
           images,
           category,
           sellerId,
+          ...rest
         });
       }}
     >

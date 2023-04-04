@@ -60,6 +60,7 @@ function RenderCategory({ item, navigation }) {
         sellerId={item.sellerId}
         images={item.images}
         navigation={navigation}
+        {...item}
       />
     </TouchableOpacity>
   );

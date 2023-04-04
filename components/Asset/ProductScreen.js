@@ -50,6 +50,7 @@ const ProductScreen = ({ navigation }) => {
       <CreateBidDrawerModal
         isBottomSheetOpen={isBottomSheetOpen}
         handleCloseBottomSheet={handleCloseBottomSheet}
+        item={useRoute().params}
       />
       <ScrollView>
         <PagerView style={styles.viewPager} initialPage={0}>

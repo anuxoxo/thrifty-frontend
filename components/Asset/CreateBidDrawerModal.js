@@ -16,11 +16,29 @@ import {
 } from "react-native";
 import SubText from "../common/SubText";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { BidContext } from "../../store/bidContext";
+import { useNavigation } from "@react-navigation/native";
 
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 
-const CreateBidDrawerModal = ({ isBottomSheetOpen, handleCloseBottomSheet }) => {
+const CreateBidDrawerModal = ({ isBottomSheetOpen, handleCloseBottomSheet, item }) => {
   const [bidAmount, setBidAmount] = React.useState("0");
+  const { createBid } = React.useContext(BidContext);
+  const navigation = useNavigation()
+
+  async function createBidHandler() {
+    const { _id, sellerId } = item;
+    const data = {
+      productId: _id,
+      sellerId,
+      bidAmount
+    }
+    const res = await createBid(data);
+    if (res) {
+      handleCloseBottomSheet()
+      navigation.navigate("Success");
+    }
+  }
 
   return (
     <Modal
@@ -134,6 +152,8 @@ const CreateBidDrawerModal = ({ isBottomSheetOpen, handleCloseBottomSheet }) => 
             </View>
           </View>
           <TouchableOpacity
+            onPress={createBidHandler}
+            disabled={bidAmount <= 0}
             style={{
               alignItems: "center",
               justifyContent: "center",
