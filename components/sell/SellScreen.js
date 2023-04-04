@@ -18,39 +18,6 @@ import SubText from "../common/SubText";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
 import CircularLoader from "../common/CircularLoader";
 
-function SellScreen({ navigation }) {
-  const { loading, productsListed, fetchSellListings } = useContext(SellContext);
-
-  useEffect(() => {
-    fetchSellListings();
-  }, []);
-
-  function addPressHandler() {
-    navigation.navigate("AddProduct");
-  }
-
-  return (
-    <SafeAreaView style={styles.outerContainer}>
-      {loading ? (
-        <CircularLoader />
-      ) : (
-        <>
-          <FlatList
-            data={productsListed}
-            numColumns={1}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <RenderCategory item={item} navigation={navigation} />
-            )}
-            style={{ marginHorizontal: 8, width: "100%" }}
-          />
-          <FloatingIcon pressHandler={addPressHandler} />
-        </>
-      )}
-    </SafeAreaView>
-  );
-}
-
 function RenderCategory({ item, navigation }) {
   const [showBids, setShowBids] = React.useState(false);
   const { loading, bids, fetchReceivedBids, acceptBid, rejectBid } = useContext(BidContext);
@@ -66,8 +33,10 @@ function RenderCategory({ item, navigation }) {
       navigation.navigate("Success");
   }
 
-  function rejectBidHandler(data) {
-
+  async function rejectBidHandler(data) {
+    const res = await rejectBid(data)
+    if (res)
+      navigation.navigate("Success");
   }
 
   return (
@@ -167,7 +136,40 @@ function RenderCategory({ item, navigation }) {
   );
 }
 
-export const SellCard = ({
+export default function SellScreen({ navigation }) {
+  const { loading, productsListed, fetchSellListings } = useContext(SellContext);
+
+  useEffect(() => {
+    fetchSellListings();
+  }, []);
+
+  function addPressHandler() {
+    navigation.navigate("AddProduct");
+  }
+
+  return (
+    <SafeAreaView style={styles.outerContainer}>
+      {loading ? (
+        <CircularLoader />
+      ) : (
+        <>
+          <FlatList
+            data={productsListed}
+            numColumns={1}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <RenderCategory item={item} navigation={navigation} />
+            )}
+            style={{ marginHorizontal: 8, width: "100%" }}
+          />
+          <FloatingIcon pressHandler={addPressHandler} />
+        </>
+      )}
+    </SafeAreaView>
+  );
+}
+
+const SellCard = ({
   id,
   name,
   price,
@@ -276,36 +278,3 @@ const styles = StyleSheet.create({
     margin: 4,
   },
 });
-
-export default SellScreen;
-
-const dummyBidsData = [
-  {
-    id: 1,
-    price: "20000",
-  },
-  {
-    id: 2,
-    price: "22000",
-  },
-  {
-    id: 3,
-    price: "19000",
-  },
-  {
-    id: 4,
-    price: "15000",
-  },
-  {
-    id: 5,
-    price: "13000",
-  },
-  {
-    id: 6,
-    price: "25000",
-  },
-  {
-    id: 7,
-    price: "23000",
-  },
-];

@@ -30,8 +30,8 @@ function orderReducer(state, action) {
     case Types.ORDERS_FAILED:
       return {
         loading: false,
-        orders: {},
-        errors: action.payload,
+        orders: [],
+        errors: action.payload.errors,
       };
     case Types.ORDERS_RESET:
       return initialState;
@@ -52,7 +52,7 @@ export default function OrderContextProvider({ children }) {
     axios
       .post("/order/", { id: user?._id })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data?.success) {
           dispatch({
             type: Types.ORDERS_SUCCESS,
@@ -69,7 +69,7 @@ export default function OrderContextProvider({ children }) {
 
   const value = {
     ...state,
-    fetchOrders
+    fetchOrders,
   };
 
   return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>;

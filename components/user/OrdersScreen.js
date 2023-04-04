@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   FlatList,
@@ -9,13 +9,12 @@ import {
   View,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import GreenRadialGradiant from "../../assets/images/common/GreenRadialGradiant.png";
-import RedRadialGradiant from "../../assets/images/common/RedRadialGradiant.png";
-
+import SubText from "../common/SubText";
 import { OrderContext } from "../../store/orderContext";
 
 function OrdersScreen({ navigation }) {
-  const { loading, orders, fetchOrders } = useContext(OrderContext)
+  const { loading, orders, fetchOrders } = useContext(OrderContext);
+  console.log(orders)
 
   useEffect(() => {
     fetchOrders();
@@ -57,35 +56,18 @@ export default OrdersScreen;
 
 function RenderCategory({ item, navigation }) {
   return (
-    <TouchableOpacity
-      style={{
-        flex: 1,
-        width: "100%",
-      }}
-      onPress={() =>
-        navigation.navigate("ProductScreen", {
-          ...item,
-        })
-      }
-    >
-      <TouchableOpacity
-        style={styles.cardStyle}
-        onPress={() => {
-          navigation.navigate("ProductScreen", {
-            name: item.name,
-            price: item.amount,
-            images: item.images,
-          });
-        }}
-      >
+    <View style={styles.cardContainer}>
+      <View style={styles.cardStyle}>
+        <Image source={{ uri: item.product.images[0] }} style={styles.cardImage} />
+
         <View style={styles.cardContent}>
-          <Text numberOfLines={1} style={styles.cardTitle}>
-            {item.name}
+          <Text numberOfLines={2} style={styles.cardTitle}>
+            {item.product.name}
           </Text>
-          <Text style={styles.cardPrice}>{`₹${item.amount}`}</Text>
+          <Text style={styles.cardPrice}>{`₹${item.product.amount}`}</Text>
         </View>
 
-        <Image source={{ uri: item.images[0] }} style={styles.cardImage} />
+        <Image source={{ uri: item.product.images[0] }} style={styles.cardImage} />
 
         <View
           style={[
@@ -104,14 +86,8 @@ function RenderCategory({ item, navigation }) {
             {item.status}
           </Text>
         </View>
-
-        {item?.cancelled == true ? (
-          <Image source={RedRadialGradiant} style={styles.gradient} />
-        ) : (
-          <Image source={GreenRadialGradiant} style={styles.gradient} />
-        )}
-      </TouchableOpacity>
-    </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
