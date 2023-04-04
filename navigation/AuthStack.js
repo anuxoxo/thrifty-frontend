@@ -1,12 +1,20 @@
 import { useContext } from "react";
-import { View, Button, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Button,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
 import { Authcontext } from "../store/authContext";
 
-// import illus1 from "../assets/images/login/illus1.png";
+import illus1 from "../assets/images/login/illus1.png";
+import SubText from "../components/common/SubText";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -37,12 +45,33 @@ export default function AuthStack() {
 
   return (
     <View style={styles.container}>
-      {/* <Image source={{ uri: illus1 }} style={styles.img} /> */}
-      <Button
-        style={{ width: 192, height: 48 }}
-        disabled={!request}
-        title="Login"
-        onPress={handlePress}
+      <Image source={illus1} style={styles.img} />
+      <Text
+        style={{
+          fontFamily: "Rubik",
+          fontSize: 24,
+          letterSpacing: 1,
+          color: "#1E1E1E",
+        }}
+      >
+        THRIFTY
+      </Text>
+      <TouchableOpacity
+        style={[
+          styles.buttonContainer,
+          {
+            borderColor: "#1E1E1E",
+            borderWidth: 0.5,
+          },
+        ]}
+        onPress={request && handlePress}
+      >
+        <Text style={styles.button}>Login With Google</Text>
+      </TouchableOpacity>
+      <SubText
+        text="By signing in, you agree to our terms of service and privacy policy"
+        family="Poppins"
+        size={8}
       />
     </View>
   );
@@ -58,7 +87,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    paddingVertical: 20,
   },
   button: {
     backgroundColor: "#724CF9",
@@ -75,10 +105,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   img: {
-    width: "100%",
+    height: "50%",
     aspectRatio: 1,
-    marginVertical: 10,
-    marginHorizontal: 5,
-    borderRadius: 5,
+  },
+  buttonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 8,
+    marginVertical: 20,
+    backgroundColor: "#724CF9",
+    borderRadius: 8,
+    shadowColor: "#1E1E1E",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+  },
+  button: {
+    fontFamily: "Rubik",
+    margin: 12,
+    fontSize: 14,
+    style: "bold",
+    color: "#fff",
   },
 });
