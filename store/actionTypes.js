@@ -17,3 +17,8 @@ export const BIDS_LOADING = "BIDS_LOADING"
 export const BIDS_SUCCESS = "BIDS_SUCCESS"
 export const BIDS_FAILED = "BIDS_FAILED"
 export const BIDS_RESET = "BIDS_RESET"
+// ORDERS
+export const ORDERS_LOADING = "ORDERS_LOADING"
+export const ORDERS_SUCCESS = "ORDERS_SUCCESS"
+export const ORDERS_FAILED = "ORDERS_FAILED"
+export const ORDERS_RESET = "ORDERS_RESET"
