@@ -11,7 +11,7 @@ import { Authcontext } from "../store/authContext";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function AuthStack() {
-  const { googleAuth } = useContext(Authcontext);
+  const { googleAuth, devAuth } = useContext(Authcontext);
 
   const [request, response, googlePromptAsync] = Google.useAuthRequest({
     expoClientId:
@@ -32,6 +32,7 @@ export default function AuthStack() {
     } else {
       await googleAuth(false, null);
     }
+    // devAuth();
   }
 
   return (

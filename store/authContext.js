@@ -35,7 +35,7 @@ function authReducer(state, action) {
         loading: false,
         isAuthenticated: false,
         user: {},
-        errors: action.payload.errors,
+        errors: action.payload?.errors,
       };
     case Types.AUTH_RESET:
       return initialState;
@@ -92,11 +92,13 @@ export default function AuthcontextProvider({ children }) {
             type: Types.AUTH_SUCCESS,
             payload: response.data?.user,
           });
+
           AsyncStorage.setItem(TOKEN_NAME, response.data.user.accessToken);
           AsyncStorage.setItem(
             "THRIFTY_USER_ID",
             response.data.user._id.toString()
           );
+
           setTimeout(() => {
             Platform.OS === "web"
               ? window.location.reload()
@@ -104,10 +106,40 @@ export default function AuthcontextProvider({ children }) {
           }, 1000);
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           // return Object.keys(error.response?.data?.errors).map(key => {
           // })
         });
+  }
+
+  function devAuth() {
+    dispatch({
+      type: Types.AUTH_SUCCESS,
+      payload: {
+        _id: "640627b56e35573dcf3ac93f",
+        email: "anushka.ak14@gmail.com",
+        googleId: "106649339691414592084",
+        name: "VANSH",
+        picture:
+          "https://lh3.googleusercontent.com/a/AGNmyxaLDFcttMnUhbGhS-S5NJ_t3i--znh3gSCx6cRuXfo=s96-c",
+        interestedCategories: [],
+        bids: ["642217770a7d46ea630544d9"],
+        __v: { $numberInt: "0" },
+      },
+    });
+
+    AsyncStorage.setItem(
+      "Authorization",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYmNmZDE5NmVjZWVjMDIwMDk1ZWQzZiIsImlhdCI6MTY3MzMyOTk0OH0.mF6_t8nf8NBjcmvI-rxpeEQcGqMiwGOQ_jnhiPzMLts"
+    );
+
+    AsyncStorage.setItem("THRIFTY_USER_ID", "640627b56e35573dcf3ac93f");
+
+    setTimeout(() => {
+      Platform.OS === "web"
+        ? window.location.reload()
+        : NativeModules.DevSettings.reload();
+    }, 1000);
   }
 
   function logout() {
@@ -158,6 +190,7 @@ export default function AuthcontextProvider({ children }) {
     googleAuth,
     updateUserInfo,
     logout,
+    devAuth,
   };
 
   return <Authcontext.Provider value={value}>{children}</Authcontext.Provider>;

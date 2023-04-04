@@ -31,7 +31,7 @@ function sellReducer(state, action) {
       return {
         loading: false,
         productsListed: {},
-        errors: action.payload.errors,
+        errors: action.payload?.errors,
       };
     case Types.SELL_LIST_RESET:
       return initialState;
@@ -62,7 +62,10 @@ export default function SellContextProvider({ children }) {
       })
       .catch((err) => {
         // console.log(err?.response?.data)
-        dispatch({ type: Types.SELL_LIST_FAILED, payload: err?.response?.data?.errors });
+        dispatch({
+          type: Types.SELL_LIST_FAILED,
+          payload: err?.response?.data?.errors,
+        });
         // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
       });
   }
@@ -109,13 +112,11 @@ export default function SellContextProvider({ children }) {
     });
   }
 
-
-
   const value = {
     ...state,
     fetchSellListings,
     addProductToSell,
-    deleteProductToSell
+    deleteProductToSell,
   };
 
   return <SellContext.Provider value={value}>{children}</SellContext.Provider>;

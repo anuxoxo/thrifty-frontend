@@ -31,7 +31,7 @@ function bidReducer(state, action) {
       return {
         loading: false,
         bids: [],
-        errors: action.payload.errors,
+        errors: action.payload?.errors,
       };
     case Types.BIDS_RESET:
       return initialState;
@@ -62,7 +62,10 @@ export default function BidContextProvider({ children }) {
       })
       .catch((err) => {
         // console.log(err?.response?.data)
-        dispatch({ type: Types.BIDS_FAILED, payload: err?.response?.data?.errors });
+        dispatch({
+          type: Types.BIDS_FAILED,
+          payload: err?.response?.data?.errors,
+        });
         // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
       });
   }
@@ -104,7 +107,7 @@ export default function BidContextProvider({ children }) {
           }
         })
         .catch((err) => {
-          console.log(err?.response?.data)
+          console.log(err?.response?.data);
           resolve(false);
         });
     });
@@ -136,7 +139,7 @@ export default function BidContextProvider({ children }) {
     fetchReceivedBids,
     createBid,
     acceptBid,
-    rejectBid
+    rejectBid,
   };
 
   return <BidContext.Provider value={value}>{children}</BidContext.Provider>;

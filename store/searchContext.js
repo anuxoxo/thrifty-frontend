@@ -30,7 +30,7 @@ function searchReducer(state, action) {
       return {
         loading: false,
         results: {},
-        errors: action.payload.errors,
+        errors: action.payload?.errors,
       };
     case Types.SEARCH_RESET:
       return initialState;
@@ -60,7 +60,10 @@ export default function SearchContextProvider({ children }) {
       })
       .catch((err) => {
         // console.log(err?.response?.data)
-        dispatch({ type: Types.SEARCH_FAILED, payload: err?.response?.data?.errors });
+        dispatch({
+          type: Types.SEARCH_FAILED,
+          payload: err?.response?.data?.errors,
+        });
         // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
       });
   }
@@ -76,7 +79,7 @@ export default function SearchContextProvider({ children }) {
         .then((res) => {
           // console.log(res.data)
           if (res.data?.success) {
-            resolve(res.data.products)
+            resolve(res.data.products);
             dispatch({
               type: Types.SEARCH_SUCCESS,
               payload: res.data.products,
@@ -85,18 +88,23 @@ export default function SearchContextProvider({ children }) {
         })
         .catch((err) => {
           // console.log(err?.response?.data)
-          dispatch({ type: Types.SEARCH_FAILED, payload: err?.response?.data?.errors });
+          dispatch({
+            type: Types.SEARCH_FAILED,
+            payload: err?.response?.data?.errors,
+          });
           // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
-          resolve([])
+          resolve([]);
         });
-    })
+    });
   }
 
   const value = {
     ...state,
     searchByKeyword,
-    searchByCategory
+    searchByCategory,
   };
 
-  return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>;
+  return (
+    <SearchContext.Provider value={value}>{children}</SearchContext.Provider>
+  );
 }

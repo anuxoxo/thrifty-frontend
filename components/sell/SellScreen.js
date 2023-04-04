@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
@@ -8,6 +8,8 @@ import {
   View,
   Image,
   Button,
+  Modal,
+  Dimensions,
 } from "react-native";
 import FloatingIcon from "../helpers/FloatingIcon";
 
@@ -15,11 +17,15 @@ import { SellContext } from "../../store/sellContext";
 import { BidContext } from "../../store/bidContext";
 
 import SubText from "../common/SubText";
-import { MaterialIcons, Entypo } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import CircularLoader from "../common/CircularLoader";
+import { dummyData } from "../home/AssetCardSwiperSection";
+
+const WINDOW_HEIGHT = Dimensions.get("window").height;
 
 function SellScreen({ navigation }) {
-  const { loading, productsListed, fetchSellListings } = useContext(SellContext);
+  const { loading, productsListed, fetchSellListings } =
+    useContext(SellContext);
 
   useEffect(() => {
     fetchSellListings();
@@ -37,6 +43,7 @@ function SellScreen({ navigation }) {
         <>
           <FlatList
             data={productsListed}
+            // data={dummyData}
             numColumns={1}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
@@ -52,54 +59,59 @@ function SellScreen({ navigation }) {
 }
 
 function RenderCategory({ item, navigation }) {
-  const [showBids, setShowBids] = React.useState(false);
-  const { loading, bids, fetchReceivedBids, acceptBid, rejectBid } = useContext(BidContext);
-
-  function viewBidsHandler(id) {
-    setShowBids(!showBids);
-    fetchReceivedBids(id)
-  }
-
-  async function acceptBidHandler(data) {
-    const res = await acceptBid(data)
-    if (res)
-      navigation.navigate("Success");
-  }
-
-  function rejectBidHandler(data) {
-
-  }
+  const [showBids, setShowBids] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        width: "100%",
-        backgroundColor: "#fff",
-        marginVertical: 5,
-        borderRadius: 15,
-        shadowColor: "#1E1E1E",
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: "black",
-        shadowOpacity: 0.4,
-        shadowRadius: 3,
-        elevation: 3,
-      }}
-    >
-      <SellCard
-        key={item._id}
-        id={item._id}
-        name={item.name}
-        price={item.amount}
-        images={item.images}
-        category={item.category}
-        sellerId={item.sellerId}
-        navigation={navigation}
-        deleteEnabled
-        {...item}
+    <>
+      <BidModal
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        itemId={item._id}
       />
+      <View
+        style={{
+          flex: 1,
+          width: "100%",
+          backgroundColor: "#fff",
+          marginVertical: 5,
+          borderRadius: 15,
+          shadowColor: "#1E1E1E",
+          shadowOffset: { width: 1, height: 1 },
+          shadowColor: "black",
+          shadowOpacity: 0.4,
+          shadowRadius: 3,
+          elevation: 5,
+        }}
+      >
+        <SellCard
+          key={item._id}
+          id={item._id}
+          name={item.name}
+          price={item.amount}
+          images={item.images}
+          category={item.category}
+          sellerId={item.sellerId}
+          navigation={navigation}
+          deleteEnabled
+          {...item}
+        />
 
-      <TouchableOpacity
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={[
+              styles.buttonContainer,
+              {
+                borderColor: "#1E1E1E",
+                borderWidth: 0.5,
+              },
+            ]}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.button}>View Bids</Text>
+          </TouchableOpacity>
+        </View>
+        {/* <TouchableOpacity
         onPress={() => viewBidsHandler(item._id)}
         style={{
           width: "100%",
@@ -118,52 +130,63 @@ function RenderCategory({ item, navigation }) {
           color="#373737"
           style={{ transform: [{ rotateZ: showBids ? "180deg" : "0deg" }] }}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      {showBids &&
-        (
-          loading
-            ? <Text>Loading...</Text>
-            : bids?.map((item) => (
-              <View
-                key={item?._id}
-                style={{
-                  width: "100%",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#efefef",
-                  padding: 5,
-                }}
-              >
-                <SubText text={"Rs. " + item?.bidAmount} size={12} color={"#373737"} />
-                <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity
-                    onPress={() => acceptBidHandler({
+        {/* {showBids &&
+        (loading ? (
+          <Text>Loading...</Text>
+        ) : (
+          bids?.map((item) => (
+            <View
+              key={item?._id}
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderBottomWidth: 1,
+                borderBottomColor: "#efefef",
+                padding: 5,
+              }}
+            >
+              <SubText
+                text={"Rs. " + item?.bidAmount}
+                size={12}
+                color={"#373737"}
+              />
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    acceptBidHandler({
                       sellerId: item?.sellerId,
                       buyerId: item?.buyerId,
                       productId: item?.productId,
-                      bidAmount: item?.bidAmount
-                    })}
-                    style={styles.textButton}>
-                    <SubText text={"Accept"} size={12} color={"#0E0E0E"} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => rejectBidHandler({
+                      bidAmount: item?.bidAmount,
+                    })
+                  }
+                  style={styles.textButton}
+                >
+                  <SubText text={"Accept"} size={12} color={"#0E0E0E"} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    rejectBidHandler({
                       sellerId: item?.sellerId,
                       buyerId: item?.buyerId,
                       productId: item?.productId,
-                      bidAmount: item?.bidAmount
-                    })}
-                    style={styles.textButton}>
-                    <SubText text={"Reject"} size={12} color={"#FF6A6A"} />
-                  </TouchableOpacity>
-                </View>
+                      bidAmount: item?.bidAmount,
+                    })
+                  }
+                  style={styles.textButton}
+                >
+                  <SubText text={"Reject"} size={12} color={"#FF6A6A"} />
+                </TouchableOpacity>
               </View>
-            )))
-      }
-    </View>
+            </View>
+          ))
+        ))} */}
+      </View>
+    </>
   );
 }
 
@@ -192,7 +215,7 @@ export const SellCard = ({
           images,
           category,
           sellerId,
-          ...rest
+          ...rest,
         });
       }}
     >
@@ -203,21 +226,135 @@ export const SellCard = ({
         </Text>
         <Text style={styles.cardPrice}>{`₹${price}`}</Text>
       </View>
+
       {deleteEnabled ? (
         <TouchableOpacity
           style={{
             position: "absolute",
             right: 20,
-            top: 33,
+            top: 40,
           }}
           onPress={async () => {
             await deleteProductToSell(id);
           }}
         >
-          <MaterialIcons name="delete" size={16} color="black" />
+          <MaterialCommunityIcons
+            name="delete-outline"
+            size={24}
+            color="#373737"
+          />
         </TouchableOpacity>
       ) : null}
     </TouchableOpacity>
+  );
+};
+
+const BidModal = ({ visible, setVisible, navigation }) => {
+  const { loading, bids, fetchReceivedBids, acceptBid, rejectBid } =
+    useContext(BidContext);
+
+  const [showBids, setShowBids] = useState(false);
+
+  const [item, setItem] = useState({});
+  const [productId, setProductId] = useState("");
+
+  useEffect(() => {
+    fetchReceivedBids();
+  }, []);
+
+  const viewBidsHandler = (id) => {
+    setShowBids(!showBids);
+    fetchReceivedBids(id);
+  };
+
+  const acceptBidHandler = async (bid) => {
+    const res = await acceptBid(data);
+    if (res) navigation.navigate("Success");
+  };
+
+  const rejectBidHandler = async (bid) => {
+    await rejectBid(bid);
+    fetchReceivedBids();
+  };
+
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={() => {
+        setVisible(!visible);
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Received Bids</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setVisible(!visible);
+              }}
+            >
+              <MaterialCommunityIcons name="close" size={24} color="#373737" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.modalBody}>
+            {loading ? (
+              <CircularLoader />
+            ) : (
+              bids?.map((item) => (
+                <View
+                  key={item?._id}
+                  style={{
+                    width: "100%",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#efefef",
+                    padding: 5,
+                  }}
+                >
+                  <SubText
+                    text={"Rs. " + item?.bidAmount}
+                    size={12}
+                    color={"#373737"}
+                  />
+                  <View style={{ flexDirection: "row" }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        acceptBidHandler({
+                          sellerId: item?.sellerId,
+                          buyerId: item?.buyerId,
+                          productId: item?.productId,
+                          bidAmount: item?.bidAmount,
+                        })
+                      }
+                      style={styles.textButton}
+                    >
+                      <SubText text={"Accept"} size={12} color={"#0E0E0E"} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        rejectBidHandler({
+                          sellerId: item?.sellerId,
+                          buyerId: item?.buyerId,
+                          productId: item?.productId,
+                          bidAmount: item?.bidAmount,
+                        })
+                      }
+                      style={styles.textButton}
+                    >
+                      <SubText text={"Reject"} size={12} color={"#FF6A6A"} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))
+            )}
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
@@ -232,18 +369,18 @@ const styles = StyleSheet.create({
   cardStyle: {
     backgroundColor: "#fff",
     borderColor: "#1E1E1E",
-    borderWidth: 1,
+    // borderWidth: 1,
     overflow: "hidden",
     width: "auto",
     height: 100,
     flexDirection: "row",
     justifyContent: "flex-start",
-    borderRadius: 15,
   },
   cardImage: {
     width: 100,
     height: "auto",
     aspectRatio: 1,
+    borderRadius: 15,
   },
   cardContent: {
     paddingHorizontal: 4,
@@ -275,6 +412,77 @@ const styles = StyleSheet.create({
   textButton: {
     margin: 4,
   },
+  buttonsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginVertical: 10,
+    fontFamily: "Rubik",
+  },
+  buttonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 8,
+    backgroundColor: "#724CF9",
+    borderRadius: 8,
+    shadowColor: "#1E1E1E",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+  },
+  button: {
+    fontFamily: "Rubik",
+    margin: 12,
+    fontSize: 14,
+    style: "bold",
+    color: "#fff",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: WINDOW_HEIGHT * 0.6,
+  },
+  modalView: {
+    width: "100%",
+    margin: 5,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 5,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalHeader: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#efefef",
+    padding: 5,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontFamily: "Poppins",
+    textAlign: "center",
+  },
+  modalBody: {
+    width: "100%",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    padding: 5,
+    minHeight: WINDOW_HEIGHT * 0.3,
+  },
 });
 
 export default SellScreen;
@@ -282,30 +490,30 @@ export default SellScreen;
 const dummyBidsData = [
   {
     id: 1,
-    price: "20000",
+    bidAmount: "20000",
   },
   {
     id: 2,
-    price: "22000",
+    bidAmount: "22000",
   },
   {
     id: 3,
-    price: "19000",
+    bidAmount: "19000",
   },
   {
     id: 4,
-    price: "15000",
+    bidAmount: "15000",
   },
   {
     id: 5,
-    price: "13000",
+    bidAmount: "13000",
   },
   {
     id: 6,
-    price: "25000",
+    bidAmount: "25000",
   },
   {
     id: 7,
-    price: "23000",
+    bidAmount: "23000",
   },
 ];

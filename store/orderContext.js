@@ -31,7 +31,7 @@ function orderReducer(state, action) {
       return {
         loading: false,
         orders: [],
-        errors: action.payload.errors,
+        errors: action.payload?.errors,
       };
     case Types.ORDERS_RESET:
       return initialState;
@@ -62,7 +62,10 @@ export default function OrderContextProvider({ children }) {
       })
       .catch((err) => {
         // console.log(err?.response?.data)
-        dispatch({ type: Types.ORDERS_FAILED, payload: err?.response?.data?.errors });
+        dispatch({
+          type: Types.ORDERS_FAILED,
+          payload: err?.response?.data?.errors,
+        });
         // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
       });
   }
@@ -72,5 +75,7 @@ export default function OrderContextProvider({ children }) {
     fetchOrders,
   };
 
-  return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>;
+  return (
+    <OrderContext.Provider value={value}>{children}</OrderContext.Provider>
+  );
 }
