@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext, useEffect } from "react";
 import {
   Button,
   FlatList,
@@ -9,10 +9,18 @@ import {
   View,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { dummyData } from "../home/AssetCardSwiperSection";
-import SubText from "../common/SubText";
+import GreenRadialGradiant from "../../assets/images/common/GreenRadialGradiant.png";
+import RedRadialGradiant from "../../assets/images/common/RedRadialGradiant.png";
+
+import { OrderContext } from "../../store/orderContext";
 
 function OrdersScreen({ navigation }) {
+  const { loading, orders, fetchOrders } = useContext(OrderContext)
+
+  useEffect(() => {
+    fetchOrders();
+  }, [])
+
   return (
     <View style={styles.outerContainer}>
       <View
@@ -27,18 +35,20 @@ function OrdersScreen({ navigation }) {
         <FontAwesome name="sort-amount-desc" size={18} color="#1E1E1E" />
       </View>
 
-      <FlatList
-        data={dummyData.slice(0, 4)}
-        numColumns={1}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <RenderCategory item={item} navigation={navigation} />
-        )}
-        style={{
-          // marginHorizontal: 8,
-          width: "100%",
-        }}
-      />
+      {loading
+        ? <Text>Loading...</Text>
+        : <FlatList
+          data={orders}
+          numColumns={1}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <RenderCategory item={item} navigation={navigation} />
+          )}
+          style={{
+            // marginHorizontal: 8,
+            width: "100%",
+          }}
+        />}
     </View>
   );
 }
@@ -47,70 +57,61 @@ export default OrdersScreen;
 
 function RenderCategory({ item, navigation }) {
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.cardStyle}>
-        <Image source={{ uri: item.images[0] }} style={styles.cardImage} />
-
+    <TouchableOpacity
+      style={{
+        flex: 1,
+        width: "100%",
+      }}
+      onPress={() =>
+        navigation.navigate("ProductScreen", {
+          ...item,
+        })
+      }
+    >
+      <TouchableOpacity
+        style={styles.cardStyle}
+        onPress={() => {
+          navigation.navigate("ProductScreen", {
+            name: item.name,
+            price: item.amount,
+            images: item.images,
+          });
+        }}
+      >
         <View style={styles.cardContent}>
-          <Text numberOfLines={2} style={styles.cardTitle}>
+          <Text numberOfLines={1} style={styles.cardTitle}>
             {item.name}
           </Text>
-          <Text style={styles.cardPrice}>{`₹${item.price}`}</Text>
+          <Text style={styles.cardPrice}>{`₹${item.amount}`}</Text>
         </View>
-      </View>
 
-      <View style={styles.cardAction}>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#724CF9",
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            marginHorizontal: 5,
-            borderRadius: 8,
-            width: "auto",
-          }}
-          onPress={() => {
-            return;
-          }}
-        >
-          <SubText text={"Pay Now"} size={12} color={"#fff"} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#fff",
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            marginHorizontal: 5,
-            borderRadius: 8,
-            width: "auto",
-            borderWidth: 1,
-          }}
-          onPress={() => {
-            return;
-          }}
-        >
-          <SubText text={"Cancel"} size={12} color={"#0e0e0e"} />
-        </TouchableOpacity>
-      </View>
+        <Image source={{ uri: item.images[0] }} style={styles.cardImage} />
 
-      <View
-        style={[
-          styles.status,
-          { backgroundColor: item.cancelled ? "#FF0E0E" : "#FFD80E" },
-        ]}
-      >
-        <Text
-          style={{
-            fontFamily: "Poppins",
-            textTransform: "uppercase",
-            fontSize: 10,
-            color: item.cancelled ? "#fff" : "#1E1E1E",
-          }}
+        <View
+          style={[
+            styles.status,
+            { backgroundColor: item.cancelled ? "#FF0E0E" : "#FFD80E" },
+          ]}
         >
-          {item.status}
-        </Text>
-      </View>
-    </View>
+          <Text
+            style={{
+              fontFamily: "Poppins",
+              textTransform: "uppercase",
+              fontSize: 10,
+              color: item.cancelled ? "#fff" : "#1E1E1E",
+            }}
+          >
+            {item.status}
+          </Text>
+        </View>
+
+        {item?.cancelled == true ? (
+          <Image source={RedRadialGradiant} style={styles.gradient} />
+        ) : (
+          <Image source={GreenRadialGradiant} style={styles.gradient} />
+        )}
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 }
 
@@ -120,12 +121,15 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: "#fff",
   },
-  cardContainer: {
+  cardStyle: {
     borderColor: "#1E1E1E",
     borderWidth: 1,
     overflow: "hidden",
     width: "auto",
     height: 200,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: 5,
     borderRadius: 15,
     shadowColor: "#1E1E1E",
     shadowOffset: { width: 1, height: 1 },
@@ -134,11 +138,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
     backgroundColor: "#fff",
-    margin: 5,
-  },
-  cardStyle: {
-    flex: 1,
-    flexDirection: "row",
   },
   cardImage: {
     width: 100,
@@ -150,7 +149,6 @@ const styles = StyleSheet.create({
   cardContent: {
     paddingHorizontal: 4,
     marginTop: 8,
-    width: "60%",
   },
   cardTitle: {
     fontSize: 20,
@@ -160,12 +158,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "left",
-  },
-  cardAction: {
-    flexDirection: "row-reverse",
-    width: "auto",
-    marginHorizontal: 8,
-    marginVertical: 8,
   },
   gradient: {
     position: "absolute",
@@ -177,7 +169,7 @@ const styles = StyleSheet.create({
   status: {
     position: "absolute",
     bottom: 10,
-    left: 10,
+    right: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,

@@ -31,7 +31,7 @@ function sellReducer(state, action) {
       return {
         loading: false,
         productsListed: {},
-        errors: action.payload.errors,
+        errors: action.payload,
       };
     case Types.SELL_LIST_RESET:
       return initialState;

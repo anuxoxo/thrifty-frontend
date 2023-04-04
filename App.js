@@ -1,6 +1,12 @@
-import * as React from "react";
-import { useLayoutEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Platform, Text } from "react-native";
+import { useLayoutEffect, useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Platform,
+  Text,
+  View,
+  Button,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -11,13 +17,12 @@ import AuthContextProvider from "./store/authContext";
 import SellContextProvider from "./store/sellContext";
 import SearchContextProvider from "./store/searchContext";
 import BidContextProvider from "./store/bidContext";
+import OrderContextProvider from "./store/orderContext";
 
 import { manageToken } from "./utils";
-import { useFonts } from "expo-font";
-import CircularLoader from "./components/common/CircularLoader";
 
 function Outlet() {
-  const [currentStack, setCurrentStack] = useState(<CircularLoader />);
+  const [currentStack, setCurrentStack] = useState(<Text>Loading...</Text>);
 
   useLayoutEffect(() => {
     manageToken().then((token) => {
@@ -30,26 +35,18 @@ function Outlet() {
 }
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    Rubik: require("./assets/fonts/Rubik-SemiBold.ttf"),
-    Poppins: require("./assets/fonts/Poppins-Medium.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <AuthContextProvider>
       <SellContextProvider>
         <SearchContextProvider>
           <BidContextProvider>
-            <NavigationContainer>
-              <SafeAreaView style={styles.container}>
-                <Outlet />
-                {/* <AuthenticatedStack /> */}
-              </SafeAreaView>
-            </NavigationContainer>
+            <OrderContextProvider>
+              <NavigationContainer>
+                <SafeAreaView style={styles.container}>
+                  <Outlet />
+                </SafeAreaView>
+              </NavigationContainer>
+            </OrderContextProvider>
           </BidContextProvider>
         </SearchContextProvider>
       </SellContextProvider>

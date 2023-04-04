@@ -35,7 +35,7 @@ function authReducer(state, action) {
         loading: false,
         isAuthenticated: false,
         user: {},
-        errors: action.payload.errors,
+        errors: action.payload,
       };
     case Types.AUTH_RESET:
       return initialState;
