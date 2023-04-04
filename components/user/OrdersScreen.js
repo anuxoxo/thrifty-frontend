@@ -3,14 +3,17 @@ import {
   Button,
   FlatList,
   Image,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import SubText from "../common/SubText";
+import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import * as Clipboard from 'expo-clipboard';
+import { openInbox } from "react-native-email-link";
 
+import SubText from "../common/SubText";
 import { OrderContext } from "../../store/orderContext";
 import { Authcontext } from "../../store/authContext";
 import CircularLoader from "../common/CircularLoader";
@@ -61,6 +64,11 @@ export default OrdersScreen;
 function RenderCategory({ item, navigation }) {
   const { updateOrder } = useContext(OrderContext)
   const { user } = useContext(Authcontext);
+  const otherEmail = user.email === item.buyer.email ? item.seller.email : item.buyer.email
+
+  const copyToClipboard = async (str) => {
+    await Clipboard.setStringAsync(str);
+  };
 
   async function payHandler(success) {
     const data = success
@@ -96,6 +104,21 @@ function RenderCategory({ item, navigation }) {
             {item.product.name}
           </Text>
           <Text style={styles.cardPrice}>{`₹${item.product.amount}`}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              copyToClipboard(otherEmail);
+              openInbox({
+                message: "Whatcha wanna do?",
+                cancelLabel: "Go back!",
+              });
+              // Linking.openURL(`mailto:${otherEmail}`)
+              //   .then(() => null)
+              //   .catch(() => null)
+            }}
+            style={{ flexDirection: "row", paddingTop: 12, alignItems: "center" }}>
+            <AntDesign style={{ paddingRight: 4 }} name="mail" size={14} color="#724CF9" />
+            <Text>{otherEmail}</Text>
+          </TouchableOpacity>
         </View>
       </View>
       {item.paymentStatus === "Pending" && item.orderStatus !== "Cancelled"
