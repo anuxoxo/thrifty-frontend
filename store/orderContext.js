@@ -70,9 +70,32 @@ export default function OrderContextProvider({ children }) {
       });
   }
 
+  async function updateOrder(id, data) {
+    const token = await AsyncStorage.getItem(TOKEN_NAME);
+    axios.defaults.headers.common["Authorization"] = token;
+
+    return new Promise((resolve, reject) => {
+      axios
+        .post("/order/update/", { id, data })
+        .then((res) => {
+          // console.log(res.data)
+          if (res.data?.success) {
+            resolve(true);
+            fetchOrders();
+          }
+        })
+        .catch((err) => {
+          // console.log(err?.response?.data)
+          resolve(false)
+        });
+      // changeState({ visible: true, type: "error", text: err?.response?.data?.errors })
+    });
+  }
+
   const value = {
     ...state,
     fetchOrders,
+    updateOrder
   };
 
   return (

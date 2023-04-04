@@ -12,9 +12,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import SubText from "../common/SubText";
 
 import { OrderContext } from "../../store/orderContext";
+import { Authcontext } from "../../store/authContext";
+import CircularLoader from "../common/CircularLoader";
 
 function OrdersScreen({ navigation }) {
-  const { loading, orders, fetchOrders } = useContext(OrderContext)
+  const { loading, orders, fetchOrders, updateOrder } = useContext(OrderContext)
 
   useEffect(() => {
     fetchOrders()
@@ -35,13 +37,15 @@ function OrdersScreen({ navigation }) {
       </View>
 
       {loading
-        ? <Text>Loading...</Text>
+        ? <CircularLoader />
         : <FlatList
           data={orders}
           numColumns={1}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <RenderCategory item={item} navigation={navigation} />
+            <RenderCategory
+              item={item}
+              navigation={navigation} />
           )}
           style={{
             // marginHorizontal: 8,
@@ -55,6 +59,30 @@ function OrdersScreen({ navigation }) {
 export default OrdersScreen;
 
 function RenderCategory({ item, navigation }) {
+  const { updateOrder } = useContext(OrderContext)
+  const { user } = useContext(Authcontext);
+
+  async function payHandler(success) {
+    const data = success
+      ? {
+        paymentStatus: "Completed"
+      }
+      : {
+        orderStatus: "Cancelled"
+      };
+
+    const res = await updateOrder(item._id, data);
+    if (res)
+      navigation.navigate("Success");
+  }
+
+  function completeDelivery() {
+    console.log("completeDelivery")
+  }
+  function verifyDelivery() {
+    console.log("verifyDelivery")
+  }
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardStyle}>
@@ -67,45 +95,71 @@ function RenderCategory({ item, navigation }) {
           <Text style={styles.cardPrice}>{`₹${item.product.amount}`}</Text>
         </View>
       </View>
-
-      <View style={styles.cardAction}>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#724CF9",
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            marginHorizontal: 5,
-            borderRadius: 8,
-            width: "auto",
-          }}
-          onPress={() => {
-            return;
-          }}
-        >
-          <SubText text={"Pay Now"} size={12} color={"#fff"} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#fff",
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            marginHorizontal: 5,
-            borderRadius: 8,
-            width: "auto",
-            borderWidth: 1,
-          }}
-          onPress={() => {
-            return;
-          }}
-        >
-          <SubText text={"Cancel"} size={12} color={"#0e0e0e"} />
-        </TouchableOpacity>
-      </View>
-
+      {item.paymentStatus === "Pending" && item.orderStatus !== "Cancelled"
+        ? <View style={styles.cardAction}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#724CF9",
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              marginHorizontal: 5,
+              borderRadius: 8,
+              width: "auto",
+            }}
+            onPress={payHandler.bind(this, true)}
+          >
+            <SubText text={"Pay Now"} size={12} color={"#fff"} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#fff",
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              marginHorizontal: 5,
+              borderRadius: 8,
+              width: "auto",
+              borderWidth: 1,
+            }}
+            onPress={payHandler.bind(this, false)}
+          >
+            <SubText text={"Cancel"} size={12} color={"#0e0e0e"} />
+          </TouchableOpacity>
+        </View>
+        : item.paymentStatus === "Completed" && item.orderStatus !== "Cancelled"
+          ? <View style={styles.cardAction}>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#724CF9",
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                marginHorizontal: 5,
+                borderRadius: 8,
+                width: "auto",
+              }}
+              onPress={user._id === item.sellerId ? completeDelivery : verifyDelivery}
+            >
+              <SubText
+                text={
+                  user._id === item.sellerId
+                    ? "Complete Delivery"
+                    : "Verify Delivery"}
+                size={12}
+                color={"#fff"} />
+            </TouchableOpacity>
+          </View>
+          : null
+      }
       <View
         style={[
           styles.status,
-          { backgroundColor: item.orderStatus ? "#FF0E0E" : "#FFD80E" },
+          {
+            backgroundColor:
+              item.orderStatus === "Cancelled"
+                ? "#FF0E0E"
+                : item.orderStatus === "Delivered"
+                  ? "#54B435"
+                  : "#FFD80E"
+          },
         ]}
       >
         <Text
@@ -113,7 +167,7 @@ function RenderCategory({ item, navigation }) {
             fontFamily: "Poppins",
             textTransform: "uppercase",
             fontSize: 10,
-            color: item.orderStatus ? "#fff" : "#1E1E1E",
+            color: item.orderStatus === "Processing" || item.orderStatus === "Pending" ? "#1E1E1E" : "#fff",
           }}
         >
           {item.orderStatus}
