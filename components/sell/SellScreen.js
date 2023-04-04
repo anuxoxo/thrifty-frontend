@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
   View,
   Image,
-  Button,
-  Modal,
   Dimensions,
 } from "react-native";
 import FloatingIcon from "../helpers/FloatingIcon";
@@ -20,6 +18,7 @@ import SubText from "../common/SubText";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import CircularLoader from "../common/CircularLoader";
 import { dummyData } from "../home/AssetCardSwiperSection";
+import BidModal from "./BidModal";
 
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 
@@ -59,25 +58,7 @@ function SellScreen({ navigation }) {
 }
 
 function RenderCategory({ item, navigation }) {
-  const [showBids, setShowBids] = React.useState(false);
-  const { loading, bids, fetchReceivedBids, acceptBid, rejectBid } = useContext(BidContext);
-
-  function viewBidsHandler(id) {
-    setShowBids(!showBids);
-    fetchReceivedBids(id)
-  }
-
-  async function acceptBidHandler(data) {
-    const res = await acceptBid(data)
-    if (res)
-      navigation.navigate("Success");
-  }
-
-  async function rejectBidHandler(data) {
-    const res = await rejectBid(data)
-    if (res)
-      navigation.navigate("Success");
-  }
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   return (
     <>
@@ -85,6 +66,7 @@ function RenderCategory({ item, navigation }) {
         visible={modalVisible}
         setVisible={setModalVisible}
         itemId={item._id}
+        navigation={navigation}
       />
       <View
         style={{
@@ -263,115 +245,6 @@ export const SellCard = ({
         </TouchableOpacity>
       ) : null}
     </TouchableOpacity>
-  );
-};
-
-const BidModal = ({ visible, setVisible, navigation }) => {
-  const { loading, bids, fetchReceivedBids, acceptBid, rejectBid } =
-    useContext(BidContext);
-
-  const [showBids, setShowBids] = useState(false);
-
-  const [item, setItem] = useState({});
-  const [productId, setProductId] = useState("");
-
-  useEffect(() => {
-    fetchReceivedBids();
-  }, []);
-
-  const viewBidsHandler = (id) => {
-    setShowBids(!showBids);
-    fetchReceivedBids(id);
-  };
-
-  const acceptBidHandler = async (bid) => {
-    const res = await acceptBid(data);
-    if (res) navigation.navigate("Success");
-  };
-
-  const rejectBidHandler = async (bid) => {
-    await rejectBid(bid);
-    fetchReceivedBids();
-  };
-
-  return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={() => {
-        setVisible(!visible);
-      }}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Received Bids</Text>
-            <TouchableOpacity
-              onPress={() => {
-                setVisible(!visible);
-              }}
-            >
-              <MaterialCommunityIcons name="close" size={24} color="#373737" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.modalBody}>
-            {loading ? (
-              <CircularLoader />
-            ) : (
-              bids?.map((item) => (
-                <View
-                  key={item?._id}
-                  style={{
-                    width: "100%",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#efefef",
-                    padding: 5,
-                  }}
-                >
-                  <SubText
-                    text={"Rs. " + item?.bidAmount}
-                    size={12}
-                    color={"#373737"}
-                  />
-                  <View style={{ flexDirection: "row" }}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        acceptBidHandler({
-                          sellerId: item?.sellerId,
-                          buyerId: item?.buyerId,
-                          productId: item?.productId,
-                          bidAmount: item?.bidAmount,
-                        })
-                      }
-                      style={styles.textButton}
-                    >
-                      <SubText text={"Accept"} size={12} color={"#0E0E0E"} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() =>
-                        rejectBidHandler({
-                          sellerId: item?.sellerId,
-                          buyerId: item?.buyerId,
-                          productId: item?.productId,
-                          bidAmount: item?.bidAmount,
-                        })
-                      }
-                      style={styles.textButton}
-                    >
-                      <SubText text={"Reject"} size={12} color={"#FF6A6A"} />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))
-            )}
-          </View>
-        </View>
-      </View>
-    </Modal>
   );
 };
 
