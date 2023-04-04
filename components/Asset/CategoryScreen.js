@@ -1,5 +1,11 @@
-import { useContext, useEffect } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useState, useContext, useEffect, useCallback } from "react";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AssetCard from "../Asset/AssetCard";
 
@@ -9,6 +15,16 @@ import CircularLoader from "../common/CircularLoader";
 const CategoryScreen = ({ navigation }) => {
   const { id, label } = useRoute().params;
   const { loading, results, searchByCategory } = useContext(SearchContext);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    searchByCategory(label);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     searchByCategory(label);
@@ -32,6 +48,9 @@ const CategoryScreen = ({ navigation }) => {
           data={results}
           numColumns={2}
           keyExtractor={(item) => item._id}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           renderItem={({ item }) => (
             <RenderCategory item={item} navigation={navigation} />
           )}

@@ -7,15 +7,14 @@ import {
   TouchableOpacity,
   Text,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import SearchIcon from "../../assets/icons/SearchIcon";
-
-import { AssetCard2 } from "../Asset/AssetCard";
-
 import { SearchContext } from "../../store/searchContext";
+import { SellContext } from "../../store/sellContext";
 
 export default function SearchScreen() {
   const navigation = useNavigation();
@@ -80,7 +79,7 @@ function RenderCategory({ item, navigation }) {
         })
       }
     >
-      <AssetCard2
+      <SearchResultCard
         key={item._id}
         name={item.name}
         price={item.amount}
@@ -93,6 +92,58 @@ function RenderCategory({ item, navigation }) {
     </TouchableOpacity>
   );
 }
+
+const SearchResultCard = ({
+  id,
+  name,
+  price,
+  images,
+  category,
+  sellerId,
+  bookMarked = false,
+  navigation,
+  deleteEnabled = false,
+}) => {
+  const { deleteProductToSell } = useContext(SellContext);
+
+  return (
+    <TouchableOpacity
+      style={styles.cardStyle}
+      onPress={() => {
+        navigation.navigate("ProductScreen", {
+          id,
+          name,
+          price,
+          images,
+          category,
+          sellerId,
+        });
+      }}
+    >
+      <Image source={{ uri: images[0] }} style={styles.cardImage} />
+      <View style={styles.cardContent}>
+        <Text numberOfLines={1} style={styles.cardTitle}>
+          {name}
+        </Text>
+        <Text style={styles.cardPrice}>{`₹${price}`}</Text>
+      </View>
+      {deleteEnabled ? (
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            right: 20,
+            top: 33,
+          }}
+          onPress={async () => {
+            await deleteProductToSell(id);
+          }}
+        >
+          <MaterialIcons name="delete" size={24} color="black" />
+        </TouchableOpacity>
+      ) : null}
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   outerContainer: {
@@ -119,5 +170,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 6,
     fontSize: 16,
+  },
+  cardStyle: {
+    backgroundColor: "#fff",
+    borderColor: "#1E1E1E",
+    borderWidth: 1,
+    overflow: "hidden",
+    width: "auto",
+    height: 100,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    margin: 5,
+    borderRadius: 15,
+    shadowColor: "#1E1E1E",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "black",
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    elevation: 2,
+    backgroundColor: "#fff",
+  },
+  cardImage: {
+    width: 100,
+    height: "auto",
+    aspectRatio: 1,
+  },
+  cardContent: {
+    paddingHorizontal: 4,
+    marginTop: 8,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontFamily: "Poppins",
+    textAlign: "center",
+  },
+  cardPrice: {
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  bookmarkIcon: {
+    position: "absolute",
+    right: 5,
+    top: 5,
+    zIndex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    width: 24,
+    height: 24,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -1,9 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback, useState } from "react";
 import {
   Button,
   FlatList,
   Image,
   Linking,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,11 +20,21 @@ import { Authcontext } from "../../store/authContext";
 import CircularLoader from "../common/CircularLoader";
 
 function OrdersScreen({ navigation }) {
-  const { loading, orders, fetchOrders } = useContext(OrderContext)
+  const { loading, orders, fetchOrders } = useContext(OrderContext);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchOrders();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   useEffect(() => {
-    fetchOrders()
-  }, [])
+    fetchOrders();
+  }, []);
 
   return (
     <View style={styles.outerContainer}>
@@ -39,22 +50,25 @@ function OrdersScreen({ navigation }) {
         <FontAwesome name="sort-amount-desc" size={18} color="#1E1E1E" />
       </View>
 
-      {loading
-        ? <CircularLoader />
-        : <FlatList
+      {loading ? (
+        <CircularLoader />
+      ) : (
+        <FlatList
           data={orders}
           numColumns={1}
           keyExtractor={(item) => item._id}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           renderItem={({ item }) => (
-            <RenderCategory
-              item={item}
-              navigation={navigation} />
+            <RenderCategory item={item} navigation={navigation} />
           )}
           style={{
             // marginHorizontal: 8,
             width: "100%",
           }}
-        />}
+        />
+      )}
     </View>
   );
 }
@@ -62,7 +76,7 @@ function OrdersScreen({ navigation }) {
 export default OrdersScreen;
 
 function RenderCategory({ item, navigation }) {
-  const { updateOrder } = useContext(OrderContext)
+  const { updateOrder } = useContext(OrderContext);
   const { user } = useContext(Authcontext);
   const otherEmail = user.email === item.buyer.email ? item.seller.email : item.buyer.email
 
@@ -73,31 +87,33 @@ function RenderCategory({ item, navigation }) {
   async function payHandler(success) {
     const data = success
       ? {
-        paymentStatus: "Completed"
-      }
+          paymentStatus: "Completed",
+        }
       : {
-        orderStatus: "Cancelled"
-      };
+          orderStatus: "Cancelled",
+        };
 
     const res = await updateOrder(item._id, data);
-    if (res)
-      navigation.navigate("Success");
+    if (res) navigation.navigate("Success");
   }
 
   function completeDelivery() {
     navigation.navigate("QrCodeScreen", {
-      ...item
+      ...item,
     });
   }
 
   function verifyDelivery() {
-    console.log("verifyDelivery")
+    console.log("verifyDelivery");
   }
 
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardStyle}>
-        <Image source={{ uri: item.product.images[0] }} style={styles.cardImage} />
+        <Image
+          source={{ uri: item.product.images[0] }}
+          style={styles.cardImage}
+        />
 
         <View style={styles.cardContent}>
           <Text numberOfLines={2} style={styles.cardTitle}>
@@ -121,8 +137,8 @@ function RenderCategory({ item, navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      {item.paymentStatus === "Pending" && item.orderStatus !== "Cancelled"
-        ? <View style={styles.cardAction}>
+      {item.paymentStatus === "Pending" && item.orderStatus !== "Cancelled" ? (
+        <View style={styles.cardAction}>
           <TouchableOpacity
             style={{
               backgroundColor: "#724CF9",
@@ -151,30 +167,34 @@ function RenderCategory({ item, navigation }) {
             <SubText text={"Cancel"} size={12} color={"#0e0e0e"} />
           </TouchableOpacity>
         </View>
-        : item.paymentStatus === "Completed" && item.orderStatus !== "Cancelled"
-          ? <View style={styles.cardAction}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#724CF9",
-                paddingVertical: 10,
-                paddingHorizontal: 20,
-                marginHorizontal: 5,
-                borderRadius: 8,
-                width: "auto",
-              }}
-              onPress={user._id === item.sellerId ? completeDelivery : verifyDelivery}
-            >
-              <SubText
-                text={
-                  user._id === item.sellerId
-                    ? "Complete Delivery"
-                    : "Verify Delivery"}
-                size={12}
-                color={"#fff"} />
-            </TouchableOpacity>
-          </View>
-          : null
-      }
+      ) : item.paymentStatus === "Completed" &&
+        item.orderStatus !== "Cancelled" ? (
+        <View style={styles.cardAction}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#724CF9",
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              marginHorizontal: 5,
+              borderRadius: 8,
+              width: "auto",
+            }}
+            onPress={
+              user._id === item.sellerId ? completeDelivery : verifyDelivery
+            }
+          >
+            <SubText
+              text={
+                user._id === item.sellerId
+                  ? "Complete Delivery"
+                  : "Verify Delivery"
+              }
+              size={12}
+              color={"#fff"}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <View
         style={[
           styles.status,
@@ -183,8 +203,8 @@ function RenderCategory({ item, navigation }) {
               item.orderStatus === "Cancelled"
                 ? "#FF0E0E"
                 : item.orderStatus === "Delivered"
-                  ? "#54B435"
-                  : "#FFD80E"
+                ? "#54B435"
+                : "#FFD80E",
           },
         ]}
       >
@@ -193,7 +213,11 @@ function RenderCategory({ item, navigation }) {
             fontFamily: "Poppins",
             textTransform: "uppercase",
             fontSize: 10,
-            color: item.orderStatus === "Processing" || item.orderStatus === "Pending" ? "#1E1E1E" : "#fff",
+            color:
+              item.orderStatus === "Processing" ||
+              item.orderStatus === "Pending"
+                ? "#1E1E1E"
+                : "#fff",
           }}
         >
           {item.orderStatus}
