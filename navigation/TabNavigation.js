@@ -95,10 +95,12 @@ const UserMenu = () => {
         style={styles.user}
       >
         {user?.picture ? (
-          <Image
-            style={{ width: 26, aspectRatio: 1 }}
-            source={{ uri: user?.picture }}
-          />
+          <View style={{ width: 26, borderRadius: 120, overflow: "hidden" }}>
+            <Image
+              style={{ width: 26, aspectRatio: 1 }}
+              source={{ uri: user?.picture }}
+            />
+          </View>
         ) : (
           <FontAwesome5 name="user-circle" size={24} color="#1E1E1E" />
         )}

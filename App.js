@@ -44,16 +44,16 @@ export default function App() {
     <AuthContextProvider>
       <SellContextProvider>
         <SearchContextProvider>
-          <BidContextProvider>
-            <OrderContextProvider>
-              <NavigationContainer>
-                <SafeAreaView style={styles.container}>
-                  <Outlet />
-                  {/* <AuthenticatedStack /> */}
-                </SafeAreaView>
-              </NavigationContainer>
-            </OrderContextProvider>
-          </BidContextProvider>
+          {/* <BidContextProvider> */}
+          <OrderContextProvider>
+            <NavigationContainer>
+              <SafeAreaView style={styles.container}>
+                <Outlet />
+                {/* <AuthenticatedStack /> */}
+              </SafeAreaView>
+            </NavigationContainer>
+          </OrderContextProvider>
+          {/* </BidContextProvider> */}
         </SearchContextProvider>
       </SellContextProvider>
     </AuthContextProvider>

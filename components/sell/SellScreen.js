@@ -12,7 +12,7 @@ import {
 import FloatingIcon from "../helpers/FloatingIcon";
 
 import { SellContext } from "../../store/sellContext";
-import { BidContext } from "../../store/bidContext";
+import BidContextProvider, { BidContext } from "../../store/bidContext";
 
 import SubText from "../common/SubText";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
@@ -61,7 +61,7 @@ function RenderCategory({ item, navigation }) {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   return (
-    <>
+    <BidContextProvider>
       <BidModal
         visible={modalVisible}
         setVisible={setModalVisible}
@@ -185,7 +185,7 @@ function RenderCategory({ item, navigation }) {
           ))
         ))} */}
       </View>
-    </>
+    </BidContextProvider>
   );
 }
 
