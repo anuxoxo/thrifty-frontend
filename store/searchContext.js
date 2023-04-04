@@ -30,7 +30,7 @@ function searchReducer(state, action) {
       return {
         loading: false,
         results: {},
-        errors: action.payload.errors,
+        errors: action.payload,
       };
     case Types.SEARCH_RESET:
       return initialState;
