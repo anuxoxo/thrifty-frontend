@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   FlatList,
@@ -9,10 +9,17 @@ import {
   View,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { dummyData } from "../home/AssetCardSwiperSection";
 import SubText from "../common/SubText";
 
+import { OrderContext } from "../../store/orderContext";
+
 function OrdersScreen({ navigation }) {
+  const { loading, orders, fetchOrders } = useContext(OrderContext)
+
+  useEffect(() => {
+    fetchOrders()
+  }, [])
+
   return (
     <View style={styles.outerContainer}>
       <View
@@ -27,18 +34,20 @@ function OrdersScreen({ navigation }) {
         <FontAwesome name="sort-amount-desc" size={18} color="#1E1E1E" />
       </View>
 
-      <FlatList
-        data={dummyData.slice(0, 4)}
-        numColumns={1}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <RenderCategory item={item} navigation={navigation} />
-        )}
-        style={{
-          // marginHorizontal: 8,
-          width: "100%",
-        }}
-      />
+      {loading
+        ? <Text>Loading...</Text>
+        : <FlatList
+          data={orders}
+          numColumns={1}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <RenderCategory item={item} navigation={navigation} />
+          )}
+          style={{
+            // marginHorizontal: 8,
+            width: "100%",
+          }}
+        />}
     </View>
   );
 }
@@ -49,13 +58,13 @@ function RenderCategory({ item, navigation }) {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardStyle}>
-        <Image source={{ uri: item.images[0] }} style={styles.cardImage} />
+        <Image source={{ uri: item.product.images[0] }} style={styles.cardImage} />
 
         <View style={styles.cardContent}>
           <Text numberOfLines={2} style={styles.cardTitle}>
-            {item.name}
+            {item.product.name}
           </Text>
-          <Text style={styles.cardPrice}>{`₹${item.price}`}</Text>
+          <Text style={styles.cardPrice}>{`₹${item.product.amount}`}</Text>
         </View>
       </View>
 
@@ -96,7 +105,7 @@ function RenderCategory({ item, navigation }) {
       <View
         style={[
           styles.status,
-          { backgroundColor: item.cancelled ? "#FF0E0E" : "#FFD80E" },
+          { backgroundColor: item.orderStatus ? "#FF0E0E" : "#FFD80E" },
         ]}
       >
         <Text
@@ -104,10 +113,10 @@ function RenderCategory({ item, navigation }) {
             fontFamily: "Poppins",
             textTransform: "uppercase",
             fontSize: 10,
-            color: item.cancelled ? "#fff" : "#1E1E1E",
+            color: item.orderStatus ? "#fff" : "#1E1E1E",
           }}
         >
-          {item.status}
+          {item.orderStatus}
         </Text>
       </View>
     </View>

@@ -59,8 +59,25 @@ function SellScreen({ navigation }) {
 }
 
 function RenderCategory({ item, navigation }) {
-  const [showBids, setShowBids] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [showBids, setShowBids] = React.useState(false);
+  const { loading, bids, fetchReceivedBids, acceptBid, rejectBid } = useContext(BidContext);
+
+  function viewBidsHandler(id) {
+    setShowBids(!showBids);
+    fetchReceivedBids(id)
+  }
+
+  async function acceptBidHandler(data) {
+    const res = await acceptBid(data)
+    if (res)
+      navigation.navigate("Success");
+  }
+
+  async function rejectBidHandler(data) {
+    const res = await rejectBid(data)
+    if (res)
+      navigation.navigate("Success");
+  }
 
   return (
     <>
