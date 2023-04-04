@@ -6,7 +6,8 @@ import AddProduct from "../components/sell/AddProduct";
 import ProductScreen from "../components/Asset/ProductScreen";
 import CategoryScreen from "../components/Asset/CategoryScreen";
 import SearchScreen from "../components/home/SearchScreen";
-import Success from "../components/common/Success"
+import Success from "../components/helpers/Success"
+import QrCodeScreen from "../components/user/QrCodeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,14 @@ export default function AuthenticatedStack() {
         }}
         name="Success"
         component={Success}
+      />
+      <Stack.Screen
+        options={{
+          title: "Complete Delivery",
+          contentStyle: { backgroundColor: "white" }
+        }}
+        name="QrCodeScreen"
+        component={QrCodeScreen}
       />
     </Stack.Navigator>
   );

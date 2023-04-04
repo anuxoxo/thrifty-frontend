@@ -16,7 +16,7 @@ import { Authcontext } from "../../store/authContext";
 import CircularLoader from "../common/CircularLoader";
 
 function OrdersScreen({ navigation }) {
-  const { loading, orders, fetchOrders, updateOrder } = useContext(OrderContext)
+  const { loading, orders, fetchOrders } = useContext(OrderContext)
 
   useEffect(() => {
     fetchOrders()
@@ -77,8 +77,11 @@ function RenderCategory({ item, navigation }) {
   }
 
   function completeDelivery() {
-    console.log("completeDelivery")
+    navigation.navigate("QrCodeScreen", {
+      ...item
+    });
   }
+
   function verifyDelivery() {
     console.log("verifyDelivery")
   }
