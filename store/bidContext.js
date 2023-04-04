@@ -30,7 +30,7 @@ function bidReducer(state, action) {
     case Types.BIDS_FAILED:
       return {
         loading: false,
-        bids: {},
+        bids: [],
         errors: action.payload.errors,
       };
     case Types.BIDS_RESET:
@@ -44,19 +44,19 @@ export default function BidContextProvider({ children }) {
   const [state, dispatch] = useReducer(bidReducer, initialState);
   const { user } = useContext(Authcontext);
 
-  async function fetchReceivedBids() {
+  async function fetchReceivedBids(productId) {
     dispatch({ type: Types.BIDS_LOADING });
     const token = await AsyncStorage.getItem(TOKEN_NAME);
     axios.defaults.headers.common["Authorization"] = token;
 
     axios
-      .get("/bid/seller/" + user?._id + "/")
+      .get("/bid/seller/" + user?._id + "/" + productId + "/")
       .then((res) => {
         // console.log(res.data)
         if (res.data?.success) {
           dispatch({
             type: Types.BIDS_SUCCESS,
-            payload: res.data.data,
+            payload: res.data.bids,
           });
         }
       })
@@ -77,7 +77,6 @@ export default function BidContextProvider({ children }) {
         .then((res) => {
           // console.log(res.data)
           if (res.data?.success) {
-            fetchReceivedBids();
             resolve(true);
           }
         })
@@ -94,16 +93,18 @@ export default function BidContextProvider({ children }) {
 
     return new Promise(function (resolve, reject) {
       axios
-        .post("/product/accept/", data)
+        .post("/bid/accept/", data)
         .then((res) => {
-          // console.log(res.data)
           if (res.data?.success) {
-            fetchReceivedBids();
+            dispatch({
+              type: Types.BIDS_SUCCESS,
+              payload: res.data.requests,
+            });
             resolve(true);
           }
         })
         .catch((err) => {
-          // console.log(err?.response?.data)
+          console.log(err?.response?.data)
           resolve(false);
         });
     });
@@ -115,7 +116,7 @@ export default function BidContextProvider({ children }) {
 
     return new Promise(function (resolve, reject) {
       axios
-        .post("/product/reject/", data)
+        .post("/bid/reject/", data)
         .then((res) => {
           // console.log(res.data)
           if (res.data?.success) {

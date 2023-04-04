@@ -12,14 +12,14 @@ import {
 import FloatingIcon from "../helpers/FloatingIcon";
 
 import { SellContext } from "../../store/sellContext";
-import { dummyData } from "../home/AssetCardSwiperSection";
+import { BidContext } from "../../store/bidContext";
+
 import SubText from "../common/SubText";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
 import CircularLoader from "../common/CircularLoader";
 
 function SellScreen({ navigation }) {
-  const { loading, productsListed, fetchSellListings } =
-    useContext(SellContext);
+  const { loading, productsListed, fetchSellListings } = useContext(SellContext);
 
   useEffect(() => {
     fetchSellListings();
@@ -37,7 +37,6 @@ function SellScreen({ navigation }) {
         <>
           <FlatList
             data={productsListed}
-            // data={dummyData}
             numColumns={1}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
@@ -54,6 +53,23 @@ function SellScreen({ navigation }) {
 
 function RenderCategory({ item, navigation }) {
   const [showBids, setShowBids] = React.useState(false);
+  const { loading, bids, fetchReceivedBids, acceptBid, rejectBid } = useContext(BidContext);
+
+  function viewBidsHandler(id) {
+    setShowBids(!showBids);
+    fetchReceivedBids(id)
+  }
+
+  async function acceptBidHandler(data) {
+    const res = await acceptBid(data)
+    if (res)
+      navigation.navigate("Success");
+  }
+
+  function rejectBidHandler(data) {
+
+  }
+
   return (
     <View
       style={{
@@ -69,11 +85,6 @@ function RenderCategory({ item, navigation }) {
         shadowRadius: 3,
         elevation: 3,
       }}
-    // onPress={() =>
-    //   navigation.navigate("ProductScreen", {
-    //     ...item,
-    //   })
-    // }
     >
       <SellCard
         key={item._id}
@@ -89,7 +100,7 @@ function RenderCategory({ item, navigation }) {
       />
 
       <TouchableOpacity
-        onPress={() => setShowBids(!showBids)}
+        onPress={() => viewBidsHandler(item._id)}
         style={{
           width: "100%",
           paddingHorizontal: 5,
@@ -110,30 +121,48 @@ function RenderCategory({ item, navigation }) {
       </TouchableOpacity>
 
       {showBids &&
-        dummyBidsData.map((item) => (
-          <View
-            key={item.id}
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              borderBottomWidth: 1,
-              borderBottomColor: "#efefef",
-              padding: 5,
-            }}
-          >
-            <SubText text={item.price} size={12} color={"#373737"} />
-            <View style={{ flexDirection: "row" }}>
-              <TouchableOpacity style={styles.textButton}>
-                <SubText text={"Accept"} size={12} color={"#0E0E0E"} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.textButton}>
-                <SubText text={"Reject"} size={12} color={"#FF6A6A"} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+        (
+          loading
+            ? <Text>Loading...</Text>
+            : bids?.map((item) => (
+              <View
+                key={item?._id}
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#efefef",
+                  padding: 5,
+                }}
+              >
+                <SubText text={"Rs. " + item?.bidAmount} size={12} color={"#373737"} />
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    onPress={() => acceptBidHandler({
+                      sellerId: item?.sellerId,
+                      buyerId: item?.buyerId,
+                      productId: item?.productId,
+                      bidAmount: item?.bidAmount
+                    })}
+                    style={styles.textButton}>
+                    <SubText text={"Accept"} size={12} color={"#0E0E0E"} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => rejectBidHandler({
+                      sellerId: item?.sellerId,
+                      buyerId: item?.buyerId,
+                      productId: item?.productId,
+                      bidAmount: item?.bidAmount
+                    })}
+                    style={styles.textButton}>
+                    <SubText text={"Reject"} size={12} color={"#FF6A6A"} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )))
+      }
     </View>
   );
 }
