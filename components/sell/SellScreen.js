@@ -85,7 +85,7 @@ function RenderCategory({ item, navigation }) {
       <View
         style={{
           flex: 1,
-          width: "100%",
+          width: "95%",
           backgroundColor: "#fff",
           marginVertical: 5,
           borderRadius: 15,
@@ -95,6 +95,7 @@ function RenderCategory({ item, navigation }) {
           shadowOpacity: 0.4,
           shadowRadius: 3,
           elevation: 5,
+          marginHorizontal: 10
         }}
       >
         <SellCard
@@ -211,6 +212,8 @@ const styles = StyleSheet.create({
     height: "auto",
     aspectRatio: 1,
     borderRadius: 15,
+    borderWidth: 10,
+    borderColor: "#fff"
   },
   cardContent: {
     paddingHorizontal: 4,

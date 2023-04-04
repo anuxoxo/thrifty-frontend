@@ -12,7 +12,7 @@ export default function QrCodeScreen() {
     <View style={styles.container}>
       <SvgQRCode
         size={width / 2}
-        value={`Order ID : ${params._id}\nOrder Status: Delivered`}
+        value={`Order ID : ${params._id}\nProduct Name : ${params.product.name}\nAmount : Rs. ${params.bidAmount}\nOrder Status: Delivered`}
       />
       <Text style={{
         padding: 50,
